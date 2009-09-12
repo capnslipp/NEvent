@@ -72,4 +72,4 @@ class NectarEvent:
 			GameObject.Find('/').BroadcastMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
 			
 		else:
-			assert 'unknown NectarEvent.Scope ' + scope.ToString()
+			assert "unknown ${self.GetType()}.Scope ${scope.ToString()}"
