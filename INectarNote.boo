@@ -7,10 +7,10 @@
 #import UnityEngine
 
 
-interface INectarNote:
+abstract class INectarNote:
 	# meant to be implemented like:
 	# 	[Getter(name)]
 	# 	static _name as string = 'NameGoesHere'
-	name as string:
+	abstract name as string:
 		get:
 			pass
