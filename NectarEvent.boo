@@ -45,12 +45,7 @@ final class NectarEvent:
 	
 	
 	def Send(sender as GameObject):
-		Debug.Log(sender)
-		
 		if scope == Scope.Local:
-			Debug.Log(scope)
-			Debug.Log(kReceiveMethodName)
-			Debug.Log(note)
 			sender.SendMessage(
 				kReceiveMethodName,
 				note,
