@@ -7,7 +7,7 @@
 #import UnityEngine
 
 
-abstract class INectarNote:
+abstract class NectarNoteBase:
 	# meant to be implemented like:
 	# 	[Getter(name)]
 	# 	static _name as string = 'NameGoesHere'

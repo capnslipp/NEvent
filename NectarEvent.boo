@@ -11,7 +11,7 @@ final class NectarEvent:
 	static final kReceiveMethodName = 'NectarReceive'
 	
 	
-	public data as INectarNote
+	public data as NectarNoteBase
 	
 	
 	name as string:
@@ -23,7 +23,7 @@ final class NectarEvent:
 			return "On${name}"
 	
 	
-	def constructor(dataNote as INectarNote):
+	def constructor(dataNote as NectarNoteBase):
 		data = dataNote
 		
 		dataTypeName as string = data.GetType().Name
