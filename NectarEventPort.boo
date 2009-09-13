@@ -7,7 +7,7 @@ import UnityEngine
 
 
 class NectarEventPort (MonoBehaviour):
-	_eventBuffer as (NectarNoteBase) #= array(NectarNoteBase, 0)
+	_eventBuffer as (NectarNoteBase) = array(NectarNoteBase, 0)
 	
 	
 	count as int:

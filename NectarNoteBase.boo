@@ -3,14 +3,18 @@
 ## @purpose	Provides …
 
 
+import System
 #import System.Reflection
 #import UnityEngine
 
 
 abstract class NectarNoteBase:
-	# meant to be implemented like:
-	# 	[Getter(name)]
-	# 	static _name as string = 'NameGoesHere'
-	abstract name as string:
-		get:
-			pass
+	[Getter(name)]
+	_name as string
+	
+	
+	def constructor():
+		# figure out the name from the class's name
+		typeName as string = self.GetType().Name
+		assert typeName.EndsWith('Note')
+		_name = typeName.Remove( typeName.LastIndexOf('Note') )
