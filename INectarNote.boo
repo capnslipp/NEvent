@@ -12,14 +12,17 @@ interface INectarNote:
 	# 	[Getter(name)]
 	# 	static _name as string = 'NameGoesHere'
 	name as string:
-		get
+		get:
+			pass
 	
 	# meant to be implemented like:
 	# 	def GetValue() as object:
 	# 		return value
-	def GetValue() as object
+	def GetValue() as object:
+		pass
 	
 	# meant to be implemented like:
 	# 	def SetValue(newValue as object):
 	# 		value = newValue
-	def SetValue(newValue as object)
+	def SetValue(newValue as object):
+		pass

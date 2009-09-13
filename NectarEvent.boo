@@ -3,7 +3,7 @@
 ## @purpose	Provides …
 
 
-#import System.Reflection
+import System
 import UnityEngine
 
 
@@ -21,7 +21,7 @@ final class NectarEvent:
 	
 	
 	def constructor(eventName as string, noteValue as object):
-		self(Note(eventName, noteValue))
+		self(CreateNote(eventName, noteValue))
 	
 	def constructor(dataNote as INectarNote):
 		data = dataNote
@@ -29,12 +29,10 @@ final class NectarEvent:
 		dataTypeName as string = data.GetType().Name
 		assert dataTypeName.EndsWith('Note')
 		assert data.name == dataTypeName.Remove( dataTypeName.LastIndexOf('Note') )
-	
-	static def Note(eventName as string, noteValue as object) as INectarNote:
-		noteType as System.Type = System.Type.GetType("${eventName}Note", true)
-		Debug.Log(noteType.GetType())
-		note as noteType
-		note.SetValue(noteValue)
+		
+	static def CreateNote(eventName as string, noteValue as object) as INectarNote:
+		noteType = Type.GetType("${eventName}Note", true)
+		note = System.Activator.CreateInstance(noteType, (noteValue,) as (object))
 		return note
 	
 	
