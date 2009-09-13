@@ -32,7 +32,7 @@ final class NectarEvent:
 		
 	static def CreateNote(eventName as string, noteValue as object) as INectarNote:
 		noteType = Type.GetType("${eventName}Note", true)
-		note = System.Activator.CreateInstance(noteType, (noteValue,) as (object))
+		note = System.Activator.CreateInstance(noteType, (noteValue) as (object))
 		return note
 	
 	
