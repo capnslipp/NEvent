@@ -10,7 +10,11 @@ import System
 
 abstract class NectarNoteBase:
 	[Getter(name)]
-	_name as string
+	final _name as string
+	
+	messageName as string:
+		get:
+			return "On${name}"
 	
 	
 	def constructor():
@@ -18,3 +22,6 @@ abstract class NectarNoteBase:
 		typeName as string = self.GetType().Name
 		assert typeName.EndsWith('Note')
 		_name = typeName.Remove( typeName.LastIndexOf('Note') )
+	
+	
+	# When sub-classing, add any data you like!
