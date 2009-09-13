@@ -7,13 +7,35 @@
 import UnityEngine
 
 
-class NectarEvent:
-	[Getter(name)]
-	_name as string
+final class NectarEvent:
+	public data as INectarNote
+	
+	
+	name as string:
+		get:
+			return data.name
 	
 	messageName as string:
 		get:
-			return "On${_name}"
+			return "On${name}"
+	
+	
+	def constructor(eventName as string, noteValue as object):
+		self(Note(eventName, noteValue))
+	
+	def constructor(dataNote as INectarNote):
+		data = dataNote
+		
+		dataTypeName as string = data.GetType().Name
+		assert dataTypeName.EndsWith('Note')
+		assert data.name == dataTypeName.Remove( dataTypeName.LastIndexOf('Note') )
+	
+	static def Note(eventName as string, noteValue as object) as INectarNote:
+		noteType as System.Type = System.Type.GetType("${eventName}Note", true)
+		Debug.Log(noteType.GetType())
+		note as noteType
+		note.SetValue(noteValue)
+		return note
 	
 	
 	enum Scope:
@@ -33,43 +55,37 @@ class NectarEvent:
 	scopeTag as string
 	
 	
-	def constructor():
-		typeName as string = self.GetType().Name
-		assert typeName.EndsWith('Event')
-		_name = typeName.Remove( typeName.LastIndexOf('Event') )
-	
-	
 	def Send(sender as GameObject):
 		if scope == Scope.Local:
-			sender.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Children:
-			sender.BroadcastMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.BroadcastMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Parent:
-			sender.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
-			sender.transform.parent.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
+			sender.transform.parent.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Ancestors:
-			sender.transform.SendMessageUpwards(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.transform.SendMessageUpwards(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Specific:
-			sender.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
-			scopeSpecificGO.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
+			scopeSpecificGO.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Named:
-			sender.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
-			GameObject.Find(scopeName).SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
+			GameObject.Find(scopeName).SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Tagged:
-			sender.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			sender.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 			taggedGOs = GameObject.FindGameObjectsWithTag(scopeTag)
 			for taggedGO in taggedGOs:
-				taggedGO.SendMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+				taggedGO.SendMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		elif scope == Scope.Global:
-			GameObject.Find('/').BroadcastMessage(messageName, self, SendMessageOptions.DontRequireReceiver)
+			GameObject.Find('/').BroadcastMessage(messageName, data.GetValue(), SendMessageOptions.DontRequireReceiver)
 			
 		else:
 			assert "unknown ${self.GetType()}.Scope ${scope.ToString()}"
