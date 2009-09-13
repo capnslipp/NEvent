@@ -11,24 +11,20 @@ final class NectarEvent:
 	static final kReceiveMethodName = 'NectarReceive'
 	
 	
-	public data as NectarNoteBase
+	public note as NectarNoteBase
 	
 	
 	name as string:
 		get:
-			return data.name
+			return note.name
 	
 	messageName as string:
 		get:
-			return "On${name}"
+			return note.messageName
 	
 	
-	def constructor(dataNote as NectarNoteBase):
-		data = dataNote
-		
-		dataTypeName as string = data.GetType().Name
-		assert dataTypeName.EndsWith('Note')
-		assert data.name == dataTypeName.Remove( dataTypeName.LastIndexOf('Note') )
+	def constructor(newNote as NectarNoteBase):
+		note = newNote
 	
 	
 	enum Scope:
@@ -41,7 +37,7 @@ final class NectarEvent:
 		Tagged # sender & all tagged GameObjects
 		Global # all GameObjects; only use for testing!!!
 	
-	scope as Scope
+	scope as Scope = Scope.Local
 	
 	scopeSpecificGO as GameObject
 	scopeName as string
@@ -49,67 +45,78 @@ final class NectarEvent:
 	
 	
 	def Send(sender as GameObject):
+		Debug.Log(sender)
+		
 		if scope == Scope.Local:
+			Debug.Log(scope)
+			Debug.Log(kReceiveMethodName)
+			Debug.Log(note)
 			sender.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
 		elif scope == Scope.Children:
 			sender.BroadcastMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
 		elif scope == Scope.Parent:
 			sender.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			sender.transform.parent.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
 		elif scope == Scope.Ancestors:
 			sender.transform.SendMessageUpwards(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
 		elif scope == Scope.Specific:
+			assert scopeSpecificGO is not null
+			
 			sender.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			scopeSpecificGO.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
 		elif scope == Scope.Named:
+			assert not String.IsNullOrEmpty(scopeName)
+			
 			sender.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			GameObject.Find(scopeName).SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
 		elif scope == Scope.Tagged:
+			assert not String.IsNullOrEmpty(scopeTag)
+			
 			sender.SendMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
@@ -117,14 +124,14 @@ final class NectarEvent:
 			for taggedGO in taggedGOs:
 				taggedGO.SendMessage(
 					kReceiveMethodName,
-					data,
+					note,
 					SendMessageOptions.DontRequireReceiver
 				)
 			
 		elif scope == Scope.Global:
 			GameObject.Find('/').BroadcastMessage(
 				kReceiveMethodName,
-				data,
+				note,
 				SendMessageOptions.DontRequireReceiver
 			)
 			
