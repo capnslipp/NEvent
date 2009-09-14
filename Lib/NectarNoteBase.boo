@@ -8,7 +8,7 @@ import System
 #import UnityEngine
 
 
-abstract class NectarNoteBase:
+abstract class NEventBase:
 	[Getter(name)]
 	final _name as string
 	

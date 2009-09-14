@@ -6,8 +6,8 @@
 import UnityEngine
 
 
-class NectarEventPort (MonoBehaviour):
-	_eventBuffer as (NectarNoteBase) = array(NectarNoteBase, 0)
+class NEventPort (MonoBehaviour):
+	_eventBuffer as (NEventBase) = array(NEventBase, 0)
 	
 	
 	count as int:
@@ -17,27 +17,27 @@ class NectarEventPort (MonoBehaviour):
 	
 	## flushes out all the old events (clearing them) and starts waiting for new ones
 	def Clean() as void:
-		_eventBuffer = array(NectarNoteBase, 0)
+		_eventBuffer = array(NEventBase, 0)
 	
 	## flushes out all the old events (returning them) and starts waiting for new ones
-	def Flush() as (NectarNoteBase):
+	def Flush() as (NEventBase):
 		tempEventBuffer = _eventBuffer # copy the array (hopefully)
 		Clean()
 		return tempEventBuffer
 	
 	
-	## removes and returns the frontmost NectarEvent in the eventBuffer
-	def Pop() as NectarNoteBase:
+	## removes and returns the frontmost NEvent in the eventBuffer
+	def Pop() as NEventBase:
 		return null if _eventBuffer.Length == 0
 		frontNEvent = _eventBuffer[0]
 		_eventBuffer = _eventBuffer[:-1]
 		return frontNEvent
 	
-	## adds a NectarEvent to the back of the eventBuffer
-	private def Push(note as NectarNoteBase) as void:
+	## adds a NEvent to the back of the eventBuffer
+	private def Push(note as NEventBase) as void:
 		_eventBuffer += (note,)
 	
 	
 	## grabs function calls (likely Unity SendMessage calls) that match the correct pattern and stuffs them into the event buffer
-	def NectarReceive(note as NectarNoteBase) as void:
+	def ReceiveNEvent(note as NEventBase) as void:
 		Push(note)

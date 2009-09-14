@@ -1,5 +1,5 @@
 #import UnityEngine
 
 
-class NectarEventTestNote (NectarNoteBase):
+class NEventTestNote (NEventBase):
 	public value as int

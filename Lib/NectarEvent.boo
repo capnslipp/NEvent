@@ -7,11 +7,11 @@ import System
 import UnityEngine
 
 
-final class NectarEvent:
-	static final kReceiveMethodName = 'NectarReceive'
+final class NEventAction:
+	static final kReceiveMethodName = 'ReceiveNEvent'
 	
 	
-	public note as NectarNoteBase
+	public note as NEventBase
 	
 	
 	name as string:
@@ -23,7 +23,7 @@ final class NectarEvent:
 			return note.messageName
 	
 	
-	def constructor(newNote as NectarNoteBase):
+	def constructor(newNote as NEventBase):
 		note = newNote
 	
 	

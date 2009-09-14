@@ -6,9 +6,9 @@
 import UnityEngine
 
 
-class NectarEventDispatch (MonoBehaviour):
+class NEventDispatch (MonoBehaviour):
 	## grabs function calls (likely Unity SendMessage calls) that match the correct pattern and re-sends them locally as On… calls
-	def NectarReceive(note as NectarNoteBase) as void:
+	def ReceiveNEvent(note as NEventBase) as void:
 		messageArgs as (object) = array(object, 0)
 		
 		# @todo: find out how many public properties note has and package them up into an object array
