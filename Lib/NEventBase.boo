@@ -20,8 +20,8 @@ abstract class NEventBase:
 	def constructor():
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
-		assert typeName.EndsWith('Note')
-		_name = typeName.Remove( typeName.LastIndexOf('Note') )
+		assert typeName.EndsWith('Event')
+		_name = typeName.Remove( typeName.LastIndexOf('Event') )
 	
 	
 	# When sub-classing, add any data you like!
