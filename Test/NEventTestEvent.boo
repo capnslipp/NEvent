@@ -1,5 +1,5 @@
 #import UnityEngine
 
 
-class NEventTestNote (NEventBase):
+class NEventTestEvent (NEventBase):
 	public value as int

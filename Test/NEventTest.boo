@@ -35,7 +35,7 @@ class NEventTest (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestEventNames():
-		testEventAction = NEventAction( NEventTestNote(value: 5) )
+		testEventAction = NEventAction( NEventTestEvent(value: 5) )
 		
 		UUnitAssert.EqualString('NEventTest', testEventAction.name, "event name should match class name minus \"…Event\"")
 		UUnitAssert.EqualString('OnNEventTest', testEventAction.messageName, "event's message name should be the name with \"On…\" at the beginning")
@@ -43,7 +43,7 @@ class NEventTest (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestEventSend():
-		testEventAction = NEventAction( NEventTestNote(value: 1) )
+		testEventAction = NEventAction( NEventTestEvent(value: 1) )
 		testEventAction.Send(testGO)
 	
 	
@@ -60,7 +60,7 @@ class NEventTest (UUnitTestCase):
 		#testEventPort.OnNEventTestDoesntExist()
 		#UUnitAssert.EqualInt(0, testEventPort.count, "this call should ASSERT because the Note doesn't exist")
 		
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 3) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 3) )
 		UUnitAssert.EqualInt(1, testEventPort.count, "this call should be RECOGNIZED because it both starts with \"On…\" and is passing in valid Note type")
 		
 		#testEventPort.OnNEventTest()
@@ -74,27 +74,27 @@ class NEventTest (UUnitTestCase):
 	def TestEventPortAddRemove():
 		UUnitAssert.True(testEventPort.count == 0, "test should start with 0 events queued up")
 		
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 1) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 2) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 3) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 4) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 5) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 6) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 7) )
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 8) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 1) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 2) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 3) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 4) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 5) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 6) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 7) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 8) )
 		UUnitAssert.EqualInt(8, testEventPort.count, "add 8 events, then check that we have 8 queued up")
 		
-		testEventPort.ReceiveNEvent( NEventTestNote(value: 8) )
+		testEventPort.ReceiveNEvent( NEventTestEvent(value: 8) )
 		UUnitAssert.EqualInt(9, testEventPort.count, "add 1 that has been already added; currently they do not cancel out so we should have 9")
 		
 		result1 = testEventPort.Pop() # make sure not to static type (we're testing the type)
 		UUnitAssert.EqualInt(8, testEventPort.count, "pop 1 and make sure that there's now one fewer")
-		UUnitAssert.EqualDuck(typeof(NEventTestNote), result1.GetType(), "make sure we got the type we added first")
+		UUnitAssert.EqualDuck(typeof(NEventTestEvent), result1.GetType(), "make sure we got the type we added first")
 		UUnitAssert.EqualString('NEventTest', result1.name, "make sure we got the name we added first")
 		
 		result2 = testEventPort.Pop() # make sure not to static type (we're testing the type)
 		UUnitAssert.EqualInt(7, testEventPort.count, "pop another 1 and make sure that there's now one fewer")
-		UUnitAssert.EqualDuck(typeof(NEventTestNote), result2.GetType(), "make sure we got the type we added second")
+		UUnitAssert.EqualDuck(typeof(NEventTestEvent), result2.GetType(), "make sure we got the type we added second")
 		UUnitAssert.EqualString('NEventTest', result2.name, "make sure we got the name we added second")
 		
 		result3 = testEventPort.Flush() # make sure not to static type (we're testing the type)
