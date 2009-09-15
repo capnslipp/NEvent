@@ -20,7 +20,7 @@ abstract class NEventBase:
 	def constructor():
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
-		assert typeName.EndsWith('Event')
+		assert typeName.EndsWith('Event'), "\"${typeName}\" (which should be a derived from \"NEventBase\") must end with \"Event\""
 		_name = typeName.Remove( typeName.LastIndexOf('Event') )
 	
 	
