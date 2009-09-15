@@ -5,5 +5,8 @@ import UnityEngine
 class NEventTestOnMessageCallbacker (MonoBehaviour):
 	event callbacks as callable(string, (object))
 	
-	def OnNEventTest(args as (object)):
-		callbacks('OnNEventTest', args)
+	def OnNEventTest(args as object):
+		if args.GetType() == array:
+			callbacks('OnNEventTest', args)
+		else:
+			callbacks('OnNEventTest', (args,))
