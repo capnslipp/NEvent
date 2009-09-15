@@ -11,17 +11,17 @@ h2. Usage
 
 h3. Usage Only
 
- 	# Go to the GitHub page for this project (likely "github.com/slippyd/unity3d-NEvent":http://github.com/slippyd/unity3d-NEvent).
- 	# Click the *Download* button.
- 	# Choose your preferred compression format (ZIP if you're unsure).
- 	# Wait for the file to download and then decompress the downloaded file (if it doesn't decompress automatically).
- 	# Rename the resulting folder to just *NEvent*.
- 	# Drop it into your project's *Assets* folder (or any subfolder).
+# Go to the GitHub page for this project (likely "github.com/slippyd/unity3d-NEvent":http://github.com/slippyd/unity3d-NEvent).
+# Click the *Download* button.
+# Choose your preferred compression format (ZIP if you're unsure).
+# Wait for the file to download and then decompress the downloaded file (if it doesn't decompress automatically).
+# Rename the resulting folder to just *NEvent*.
+# Drop it into your project's *Assets* folder (or any subfolder).
 
 h3. Usage & Modification
 
-	# Make sure you're set up for Git. (There are plenty of good resources available, including GitHub itself.)
-	# @cd@ into the Assets directory (or a subdirectory of your choice).
-	# Follow the GitHub help page at "help.github.com/forking":http://help.github.com/forking/ .
-	#* On the line where it says to do a @git clone@, you'll probably want to do this:<br/>
-		@git clone git@github.com:yourusernamehere/unity3d-NEvent.git NEvent@
+# Make sure you're set up for Git. (There are plenty of good resources available, including GitHub itself.)
+# @cd@ into the Assets directory (or a subdirectory of your choice).
+# Follow the GitHub help page at "help.github.com/forking":http://help.github.com/forking/ .
+#* On the line where it says to do a @git clone@, you'll probably want to do this:<br/>
+	<pre>git clone git@github.com:yourusernamehere/unity3d-NEvent.git NEvent</pre>
