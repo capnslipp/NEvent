@@ -5,10 +5,10 @@
 
 import System
 #import System.Reflection
-#import UnityEngine
+import UnityEngine
 
 
-abstract class NEventBase:
+abstract class NEventBase (ScriptableObject):
 	[Getter(name)]
 	final _name as string
 	

@@ -8,7 +8,7 @@ import System
 import UnityEngine
 
 
-abstract class NAbilityBase (MonoBehaviour):
+abstract class NAbilityBase (ScriptableObject):
 	[Getter(abilityName)]
 	final _abilityName as string
 	

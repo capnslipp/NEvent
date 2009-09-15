@@ -8,7 +8,7 @@ import System.Reflection
 import UnityEngine
 
 
-abstract class NReactionBase (MonoBehaviour):
+abstract class NReactionBase (ScriptableObject):
 	[Getter(eventName)]
 	final _eventName as string
 	
