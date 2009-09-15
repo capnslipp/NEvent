@@ -10,6 +10,8 @@ class NEventTest (UUnitTestCase):
 	public testEventDispatch as NEventDispatch
 	public testEventOnMessageCallbacker as NEventTestOnMessageCallbacker
 	
+	public testReaction as NEventTestDoNothingOnNEventTest
+	
 	
 	def SetUp():
 		testGO = GameObject()
@@ -21,6 +23,8 @@ class NEventTest (UUnitTestCase):
 		testEventDispatch = testGO.AddComponent( NEventDispatch )
 		testEventOnMessageCallbacker = testGO.AddComponent( NEventTestOnMessageCallbacker )
 		testEventOnMessageCallbacker.callbacks += PrintOnMessageCallbacks
+		
+		testReaction = testGO.AddComponent( NEventTestDoNothingOnNEventTest )
 	
 	
 	def PrintOnMessageCallbacks(messageName as string, args as (object)):
@@ -43,7 +47,7 @@ class NEventTest (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestEventSend():
-		testEventAction = NEventAction( NEventTestEvent(value: 1) )
+		testEventAction = NEventAction( NEventTestEvent(value: 101) )
 		testEventAction.Send(testGO)
 	
 	
@@ -102,3 +106,11 @@ class NEventTest (UUnitTestCase):
 		UUnitAssert.EqualInt(7, result3.Length, "flush the rest and make sure we got the right number of elements back")
 		
 		UUnitAssert.EqualInt(0, testEventPort.count, "make sure there's none left now")
+	
+	
+	[UUnitTest]
+	def TestReactionNames():
+		UUnitAssert.EqualString('NEventTest', testReaction.eventName, "NReaction eventName should match what's after the \"On\" in the class name")
+		
+		testEventAction = NEventAction( NEventTestEvent(value: 26) )
+		testEventAction.Send(testGO)
