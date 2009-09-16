@@ -128,7 +128,7 @@ class NEvent_TestCase (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestReaction():
-		testReaction = NEvent_TestCallbackOnNEventTest()
+		testReaction = NEvent_TestCallbackOnNEvent_Test()
 		testReaction.callbacks += self.AddCallbackToQueue
 		testReactionDock.reactions += (testReaction as NReactionBase,)
 		
@@ -149,7 +149,7 @@ class NEvent_TestCase (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestAbility():
-		testReaction = NEvent_TestCallbackOnNEventTest()
+		testReaction = NEvent_TestCallbackOnNEvent_Test()
 		testReaction.callbacks += self.AddCallbackToQueue
 		testReactionDock.reactions += (testReaction as NReactionBase,)
 		

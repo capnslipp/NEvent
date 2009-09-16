@@ -1,7 +1,7 @@
 #import UnityEngine
 
 
-class NEvent_TestCallbackOnNEventTest (NReactionBase):
+class NEvent_TestCallbackOnNEvent_Test (NReactionBase):
 	event callbacks as callable(string, (object))
 	
 	def OnNEvent_Test(args as object):
