@@ -1,8 +1,7 @@
-import UnityEngine
+#import UnityEngine
 
 
-# can't use IQuackFu and QuackInvoke() because they don't get called from GameObject#SendMessage()
-class NEventTestOnMessageCallbacker (MonoBehaviour):
+class NEventTestCallbackOnNEventTest (NReactionBase):
 	event callbacks as callable(string, (object))
 	
 	def OnNEventTest(args as object):
