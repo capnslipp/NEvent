@@ -26,12 +26,12 @@ class NEventAction:
 			return (noteType() as NEventBase).messageName
 	
 	
-	def constructor(noteType as string):
-		noteType = Type.GetType(noteType)
+	def constructor(aNoteType as string):
+		noteType = Type.GetType(aNoteType)
 		assert noteType.IsSubclassOf(NEventBase)
 	
-	def constructor(noteType as Type):
-		noteType = noteType
+	def constructor(aNoteType as Type):
+		noteType = aNoteType
 		assert noteType.IsSubclassOf(NEventBase)
 		
 	
