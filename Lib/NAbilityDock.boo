@@ -4,11 +4,12 @@
 
 
 import System
+import System.Collections
 #import System.Reflection
 import UnityEngine
 
 
-class NAbilityDock (MonoBehaviour, Collections.IEnumerable):
+class NAbilityDock (MonoBehaviour, IEnumerable):
 	# keys are Types
 	# values are instances of classes derived from NAbilityBase
 	_abilities as Hash = {}
@@ -31,12 +32,12 @@ class NAbilityDock (MonoBehaviour, Collections.IEnumerable):
 		_abilities[abilityType] = abilityToAdd
 	
 	
-	# Collections.IEnumerable
+	# IEnumerable
 	
-	def GetEnumerator() as Collections.IEnumerator:
+	def GetEnumerator() as IEnumerator:
 		return Enumerator(_abilities.Values);
 	
-	class Enumerator (Collections.IEnumerator):
+	class Enumerator (IEnumerator):
 		_abilities as (NAbilityBase)
 		
 		# Enumerators are positioned before the first element until the first MoveNext() call.
