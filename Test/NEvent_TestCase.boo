@@ -133,7 +133,7 @@ class NEvent_TestCase (UUnitTestCase):
 	def TestReaction():
 		testReaction = NEvent_TestCallbackOnNEvent_Test()
 		testReaction.callbacks += self.AddCallbackToQueue
-		testReactionDock.reactions += (testReaction as NReactionBase,)
+		testReactionDock.AddReaction(testReaction)
 		
 		UUnitAssert.EqualString('NEvent_Test', testReaction.eventName, "NReaction eventName should match what's after the \"On\" in the class name")
 		
@@ -156,7 +156,7 @@ class NEvent_TestCase (UUnitTestCase):
 	def TestAbility():
 		testReaction = NEvent_TestCallbackOnNEvent_Test()
 		testReaction.callbacks += self.AddCallbackToQueue
-		testReactionDock.reactions += (testReaction as NReactionBase,)
+		testReactionDock.AddReaction(testReaction)
 		
 		testAbility = NEvent_TestAbility()
 		testAbility.owner = testAbilityDock.gameObject
