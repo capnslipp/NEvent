@@ -7,7 +7,7 @@ class NEvent_TestCase (UUnitTestCase):
 	
 	public testGO as GameObject
 	
-	public testEventPort as NEventPort
+	public testEventSocket as NEventSocket
 	
 	public testEventDispatch as NEventDispatch
 	
@@ -38,7 +38,7 @@ class NEvent_TestCase (UUnitTestCase):
 		testGO.name = "${self.GetType()}GO"
 		testGO.transform.parent = GameObject.Find('/*Test').transform
 		
-		testEventPort = testGO.AddComponent(NEventPort)
+		testEventSocket = testGO.AddComponent(NEventSocket)
 		
 		testEventDispatch = testGO.AddComponent(NEventDispatch)
 		
@@ -71,59 +71,59 @@ class NEvent_TestCase (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestEventPortCalls():
-		UUnitAssert.EqualInt(0, testEventPort.count, "test should start with 0 events queued up")
+		UUnitAssert.EqualInt(0, testEventSocket.count, "test should start with 0 events queued up")
 		
-		#testEventPort.OnNEvent_Test()
-		#UUnitAssert.EqualInt(0, testEventPort.count, "this call should be IGNORED because it has no NEventAction argument")
+		#testEventSocket.OnNEvent_Test()
+		#UUnitAssert.EqualInt(0, testEventSocket.count, "this call should be IGNORED because it has no NEventAction argument")
 		
-		#testEventPort.NEvent_Test()
-		#UUnitAssert.EqualInt(0, testEventPort.count, "this call should be IGNORED because it doesn't start with \"On…\"")
+		#testEventSocket.NEvent_Test()
+		#UUnitAssert.EqualInt(0, testEventSocket.count, "this call should be IGNORED because it doesn't start with \"On…\"")
 		
-		#testEventPort.OnNEventTestDoesntExist()
-		#UUnitAssert.EqualInt(0, testEventPort.count, "this call should ASSERT because the Note doesn't exist")
+		#testEventSocket.OnNEventTestDoesntExist()
+		#UUnitAssert.EqualInt(0, testEventSocket.count, "this call should ASSERT because the Note doesn't exist")
 		
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 3) )
-		UUnitAssert.EqualInt(1, testEventPort.count, "this call should be RECOGNIZED because it both starts with \"On…\" and is passing in valid Note type")
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 3) )
+		UUnitAssert.EqualInt(1, testEventSocket.count, "this call should be RECOGNIZED because it both starts with \"On…\" and is passing in valid Note type")
 		
-		#testEventPort.OnNEvent_Test()
-		#UUnitAssert.EqualInt(2, testEventPort.count, "this call should be RECOGNIZED because it both starts with \"On…\" and is passing in valid Note type")
+		#testEventSocket.OnNEvent_Test()
+		#UUnitAssert.EqualInt(2, testEventSocket.count, "this call should be RECOGNIZED because it both starts with \"On…\" and is passing in valid Note type")
 		
-		testEventPort.Clean()
-		UUnitAssert.EqualInt(0, testEventPort.count, "cleaned; now we should have 0 events again")
+		testEventSocket.Clean()
+		UUnitAssert.EqualInt(0, testEventSocket.count, "cleaned; now we should have 0 events again")
 	
 	
 	[UUnitTest]
 	def TestEventPortAddRemove():
-		UUnitAssert.True(testEventPort.count == 0, "test should start with 0 events queued up")
+		UUnitAssert.True(testEventSocket.count == 0, "test should start with 0 events queued up")
 		
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 1) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 2) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 3) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 4) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 5) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 6) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 7) )
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 8) )
-		UUnitAssert.EqualInt(8, testEventPort.count, "add 8 events, then check that we have 8 queued up")
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 1) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 2) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 3) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 4) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 5) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 6) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 7) )
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 8) )
+		UUnitAssert.EqualInt(8, testEventSocket.count, "add 8 events, then check that we have 8 queued up")
 		
-		testEventPort.ReceiveNEvent( NEvent_TestEvent(value: 8) )
-		UUnitAssert.EqualInt(9, testEventPort.count, "add 1 that has been already added; currently they do not cancel out so we should have 9")
+		testEventSocket.ReceiveNEvent( NEvent_TestEvent(value: 8) )
+		UUnitAssert.EqualInt(9, testEventSocket.count, "add 1 that has been already added; currently they do not cancel out so we should have 9")
 		
-		result1 = testEventPort.Pop() # make sure not to static type (we're testing the type)
-		UUnitAssert.EqualInt(8, testEventPort.count, "pop 1 and make sure that there's now one fewer")
+		result1 = testEventSocket.Pop() # make sure not to static type (we're testing the type)
+		UUnitAssert.EqualInt(8, testEventSocket.count, "pop 1 and make sure that there's now one fewer")
 		UUnitAssert.EqualDuck(typeof(NEvent_TestEvent), result1.GetType(), "make sure we got the type we added first")
 		UUnitAssert.EqualString('NEvent_Test', result1.name, "make sure we got the name we added first")
 		
-		result2 = testEventPort.Pop() # make sure not to static type (we're testing the type)
-		UUnitAssert.EqualInt(7, testEventPort.count, "pop another 1 and make sure that there's now one fewer")
+		result2 = testEventSocket.Pop() # make sure not to static type (we're testing the type)
+		UUnitAssert.EqualInt(7, testEventSocket.count, "pop another 1 and make sure that there's now one fewer")
 		UUnitAssert.EqualDuck(typeof(NEvent_TestEvent), result2.GetType(), "make sure we got the type we added second")
 		UUnitAssert.EqualString('NEvent_Test', result2.name, "make sure we got the name we added second")
 		
-		result3 = testEventPort.Flush() # make sure not to static type (we're testing the type)
+		result3 = testEventSocket.Flush() # make sure not to static type (we're testing the type)
 		UUnitAssert.EqualDuck(typeof( (NEventBase) ), result3.GetType(), "flush the rest and make sure we got the right type back")
 		UUnitAssert.EqualInt(7, result3.Length, "flush the rest and make sure we got the right number of elements back")
 		
-		UUnitAssert.EqualInt(0, testEventPort.count, "make sure there's none left now")
+		UUnitAssert.EqualInt(0, testEventSocket.count, "make sure there's none left now")
 	
 	
 	[UUnitTest]

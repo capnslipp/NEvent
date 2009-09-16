@@ -6,7 +6,7 @@
 import UnityEngine
 
 
-class NEventPort (MonoBehaviour):
+class NEventSocket (MonoBehaviour):
 	_eventBuffer as (NEventBase) = array(NEventBase, 0)
 	
 	
