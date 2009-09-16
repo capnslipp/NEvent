@@ -12,7 +12,7 @@ class NEventAction:
 	static final kReceiveMethodName = 'ReceiveNEvent'
 	
 	
-	noteType as Type
+	final public noteType as Type
 	
 	
 	name as string:
