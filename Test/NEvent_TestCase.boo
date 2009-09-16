@@ -143,7 +143,7 @@ class NEvent_TestCase (UUnitTestCase):
 		# check that the message went through
 		UUnitAssert.EqualInt(1, callbackQueue.Length, "there should be 1 callback in the callback queue after the event Send")
 		UUnitAssert.EqualString('OnNEvent_Test', callbackQueue[0].messageName, "make sure we got back the name of the action's event's message")
-		UUnitAssert.EqualDuck(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualInt(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
 		UUnitAssert.EqualDuck(26, callbackQueue[0].args[0], "make sure we got back the same args we sent via the action's event")
 	
 	
@@ -166,8 +166,8 @@ class NEvent_TestCase (UUnitTestCase):
 		# check that the message went through
 		UUnitAssert.EqualInt(2, callbackQueue.Length, "there should be 1 callback in the callback queue after the event Send")
 		UUnitAssert.EqualString('OnNEvent_Test', callbackQueue[0].messageName, "make sure we got back the name of the action's event's message")
-		UUnitAssert.EqualDuck(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualInt(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
 		UUnitAssert.EqualDuck(-20, callbackQueue[0].args[0], "make sure we got back the same args we sent via the action's event")
 		UUnitAssert.EqualString('OnNEvent_Test', callbackQueue[1].messageName, "make sure we got back the name of the action's event's message")
-		UUnitAssert.EqualDuck(1, callbackQueue[1].args.Length, "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualInt(1, callbackQueue[1].args.Length, "make sure we got back the same args we sent via the action's event")
 		UUnitAssert.EqualDuck(20, callbackQueue[1].args[0], "make sure we got back the same args we sent via the action's event")
