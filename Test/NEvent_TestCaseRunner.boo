@@ -2,6 +2,10 @@ import UnityEngine
 
 
 class NEvent_TestCaseRunner (MonoBehaviour):
+	def Awake():
+		Camera.main.backgroundColor = Color.green
+	
+	
 	def Start():
 		suite = UUnitTestSuite()
 		
@@ -16,4 +20,4 @@ class NEvent_TestCaseRunner (MonoBehaviour):
 		
 		
 		if result.failedCount > 0: # fail
-			Camera.main.backgroundColor = Color.red # red color
+			Camera.main.backgroundColor = Color.red
