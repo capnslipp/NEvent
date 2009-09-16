@@ -15,7 +15,7 @@ class NEventSocket (MonoBehaviour):
 			return _eventBuffer.Length
 	
 	
-	## flushes out all the old events (clearing them) and starts waiting for new ones
+	## clears out all the old events (returning nothing) and starts waiting for new ones
 	def Clean() as void:
 		_eventBuffer = array(NEventBase, 0)
 	
