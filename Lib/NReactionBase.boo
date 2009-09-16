@@ -13,6 +13,10 @@ abstract class NReactionBase (ScriptableObject):
 	final _eventName as string
 	
 	
+	# allows derived classes access to the handy GameObject and Component accessors
+	public owner as GameObject
+	
+	
 	def constructor():
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
@@ -29,3 +33,9 @@ abstract class NReactionBase (ScriptableObject):
 				methodExistsForEvent = true
 				break
 		assert methodExistsForEvent
+	
+	
+	gameObject as GameObject:
+		get:
+			assert owner is not null
+			return owner

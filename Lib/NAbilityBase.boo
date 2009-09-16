@@ -13,11 +13,21 @@ abstract class NAbilityBase (ScriptableObject):
 	final _abilityName as string
 	
 	
+	# allows derived classes access to the handy GameObject and Component accessors
+	public owner as GameObject
+	
+	
 	def constructor():
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
 		assert typeName.EndsWith('Ability')
 		_abilityName = typeName.Remove( typeName.LastIndexOf('Ability') )
+	
+	
+	gameObject as GameObject:
+		get:
+			assert owner is not null
+			return owner
 	
 	
 	# When sub-classing, add any data you like!
