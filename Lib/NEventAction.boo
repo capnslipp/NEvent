@@ -9,9 +9,6 @@ import UnityEngine
 
 
 class NEventAction:
-	static final kReceiveMethodName = 'ReceiveNEvent'
-	
-	
 	final public noteType as Type
 	
 	

@@ -9,6 +9,9 @@ import UnityEngine
 
 
 abstract class NEventBase (ScriptableObject):
+	public static final kReceiveMethodName = 'ReceiveNEvent'
+	
+	
 	[Getter(name)]
 	final _name as string
 	
