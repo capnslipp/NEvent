@@ -160,7 +160,7 @@ class NEvent_TestCase (UUnitTestCase):
 		
 		testAbility = NEvent_TestAbility()
 		testAbility.owner = testAbilityDock.gameObject
-		testAbilityDock.abilities += (testAbility as NAbilityBase,)
+		testAbilityDock.AddAbility(testAbility)
 		
 		# send the message via an ability change
 		testAbility.value = -20
