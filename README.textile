@@ -4,7 +4,7 @@ NEvent is an event system for the Unity Game Engine, developed by Slippy Douglas
 
 * NEvent optionally uses UUnit ("github.com/slippyd/unity3d-UUnit":http://github.com/slippyd/unity3d-UUnit). To remove this dependency, locally delete the "Test" folder.
 
-License info pending.
+License info pending, but it will likely be some kind of "free to use, as long as you give me credit" type of deal. It is on GitHub, after all.
 
 
 h2. Usage
