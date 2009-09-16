@@ -67,7 +67,7 @@ class NEventAction:
 		noteFields as (FieldInfo) = note.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
 		assert noteArgs.Length == noteFields.Length
 		
-		for nI in range(0, noteFields.Length - 1):
+		for nI in range(0, noteFields.Length):
 			noteField as FieldInfo = noteFields[nI]
 			noteField.SetValue(note, noteArgs[nI])
 		
