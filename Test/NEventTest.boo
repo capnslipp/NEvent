@@ -3,6 +3,8 @@ import UnityEngine
 
 
 class NEventTest (UUnitTestCase):
+	# utility vars/constructs
+	
 	public testGO as GameObject
 	
 	public testEventPort as NEventPort
@@ -37,9 +39,11 @@ class NEventTest (UUnitTestCase):
 		Debug.Log("NEventTestOnMessageCallbacker: ${messageName}(${argsString})")
 	
 	
+	# test methods
+	
 	[UUnitTest]
 	def TestEventNames():
-		testEventAction = NEventAction( NEventTestEvent(value: 5) )
+		testEventAction = NEventAction(NEventTestEvent)
 		
 		UUnitAssert.EqualString('NEventTest', testEventAction.name, "event name should match class name minus \"…Event\"")
 		UUnitAssert.EqualString('OnNEventTest', testEventAction.messageName, "event's message name should be the name with \"On…\" at the beginning")
@@ -47,8 +51,8 @@ class NEventTest (UUnitTestCase):
 	
 	[UUnitTest]
 	def TestEventSend():
-		testEventAction = NEventAction( NEventTestEvent(value: 101) )
-		testEventAction.Send(testGO)
+		testEventAction = NEventAction(NEventTestEvent)
+		testEventAction.Send(testGO, 101)
 	
 	
 	[UUnitTest]

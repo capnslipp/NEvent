@@ -4,27 +4,36 @@
 
 
 import System
+import System.Reflection
 import UnityEngine
 
 
-final class NEventAction:
+class NEventAction:
 	static final kReceiveMethodName = 'ReceiveNEvent'
 	
 	
-	public note as NEventBase
+	noteType as Type
 	
 	
 	name as string:
 		get:
-			return note.name
+			# @todo: bad, bad, bad; must find a cleaner way to do this!
+			return (noteType() as NEventBase).name
 	
 	messageName as string:
 		get:
-			return note.messageName
+			# @todo: bad, bad, bad; must find a cleaner way to do this!
+			return (noteType() as NEventBase).messageName
 	
 	
-	def constructor(newNote as NEventBase):
-		note = newNote
+	def constructor(noteType as string):
+		noteType = Type.GetType(noteType)
+		assert noteType.IsSubclassOf(NEventBase)
+	
+	def constructor(noteType as Type):
+		noteType = noteType
+		assert noteType.IsSubclassOf(NEventBase)
+		
 	
 	
 	enum Scope:
@@ -45,6 +54,24 @@ final class NEventAction:
 	
 	
 	def Send(sender as GameObject):
+		Send(sender, null)
+	
+	def Send(sender as GameObject, noteArg as object):
+		Send(sender, (noteArg,))
+	
+	def Send(sender as GameObject, noteArgs as (object)):
+		note = ScriptableObject.CreateInstance(noteType.ToString())
+		assert note.GetType().IsSubclassOf(NEventBase)
+		
+		
+		noteFields as (FieldInfo) = note.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
+		assert noteArgs.Length == noteFields.Length
+		
+		for nI in range(0, noteFields.Length - 1):
+			noteField as FieldInfo = noteFields[nI]
+			noteField.SetValue(note, noteArgs[nI])
+		
+		
 		if scope == Scope.Local:
 			sender.SendMessage(
 				kReceiveMethodName,
