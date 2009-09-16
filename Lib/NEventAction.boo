@@ -8,14 +8,9 @@ import System.Reflection
 import UnityEngine
 
 
-class NEventAction:
+class NEventAction (ScriptableObject):
 	final public noteType as Type
 	
-	
-	name as string:
-		get:
-			# @todo: bad, bad, bad; must find a cleaner way to do this!
-			return (noteType() as NEventBase).name
 	
 	messageName as string:
 		get:
@@ -24,13 +19,14 @@ class NEventAction:
 	
 	
 	def constructor(aNoteType as string):
-		noteType = Type.GetType(aNoteType)
-		assert noteType.IsSubclassOf(NEventBase)
+		self( Type.GetType(aNoteType) )
 	
 	def constructor(aNoteType as Type):
 		noteType = aNoteType
 		assert noteType.IsSubclassOf(NEventBase)
 		
+		# @todo: bad, bad, bad; must find a cleaner way to do this!
+		name = (noteType() as NEventBase).name
 	
 	
 	enum Scope:
