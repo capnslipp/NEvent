@@ -1,11 +1,11 @@
 #import UnityEngine
 
 
-class NEventTestCallbackOnNEventTest (NReactionBase):
+class NEvent_TestCallbackOnNEventTest (NReactionBase):
 	event callbacks as callable(string, (object))
 	
-	def OnNEventTest(args as object):
+	def OnNEvent_Test(args as object):
 		if args.GetType() == array:
-			callbacks('OnNEventTest', args)
+			callbacks('OnNEvent_Test', args)
 		else:
-			callbacks('OnNEventTest', (args,))
+			callbacks('OnNEvent_Test', (args,))

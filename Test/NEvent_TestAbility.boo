@@ -1,8 +1,8 @@
 #import UnityEngine
 
 
-class NEventTestAbility (NAbilityBase):
-	_testEventAction as NEventAction = NEventAction(NEventTestEvent)
+class NEvent_TestAbility (NAbilityBase):
+	_testEventAction as NEventAction = NEventAction(NEvent_TestEvent)
 	
 	_value as int = 0
 	value:

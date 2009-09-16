@@ -1,11 +1,11 @@
 import UnityEngine
 
 
-class NEventTestCaseRunner (MonoBehaviour):
+class NEvent_TestCaseRunner (MonoBehaviour):
 	def Start():
 		suite = UUnitTestSuite()
 		
-		suite.AddAll( NEventTest() )
+		suite.AddAll( NEvent_TestCase() )
 		
 		
 		result = suite.Run(null)
