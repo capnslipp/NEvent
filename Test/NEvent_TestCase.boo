@@ -7,6 +7,7 @@ class NEvent_TestCase (UUnitTestCase):
 	
 	public testGO as GameObject
 	
+	public testEventPlug as NEventPlug
 	public testEventSocket as NEventSocket
 	
 	public testEventDispatch as NEventDispatch
@@ -38,6 +39,8 @@ class NEvent_TestCase (UUnitTestCase):
 		testGO.name = "${self.GetType()}GO"
 		testGO.transform.parent = GameObject.Find('/*Test').transform
 		
+		testEventPlug = testGO.AddComponent(NEventPlug)
+		testEventPlug.autoSends = false
 		testEventSocket = testGO.AddComponent(NEventSocket)
 		
 		testEventDispatch = testGO.AddComponent(NEventDispatch)
@@ -134,11 +137,13 @@ class NEvent_TestCase (UUnitTestCase):
 		
 		UUnitAssert.EqualString('NEvent_Test', testReaction.eventName, "NReaction eventName should match what's after the \"On\" in the class name")
 		
-		UUnitAssert.EqualInt(0, callbackQueue.Length, "there should be 0 callbacks in the callback queue before the event Send")
-		
 		# send the message via an action
 		testEventAction = NEventAction(NEvent_TestEvent)
 		testEventAction.Send(testGO, 26)
+		
+		UUnitAssert.EqualInt(0, callbackQueue.Length, "there should be 0 callbacks in the callback queue before the Plug's SendEvents()")
+		
+		testEventPlug.SendEvents()
 		
 		# check that the message went through
 		UUnitAssert.EqualInt(1, callbackQueue.Length, "there should be 1 callback in the callback queue after the event Send")
@@ -157,14 +162,16 @@ class NEvent_TestCase (UUnitTestCase):
 		testAbility.owner = testAbilityDock.gameObject
 		testAbilityDock.abilities += (testAbility as NAbilityBase,)
 		
-		UUnitAssert.EqualInt(0, callbackQueue.Length, "there should be 0 callbacks in the callback queue before the event Send")
-		
 		# send the message via an ability change
 		testAbility.value = -20
 		testAbility.value = 20
 		
+		UUnitAssert.EqualInt(0, callbackQueue.Length, "there should be 0 callbacks in the callback queue before the Plug's SendEvents()")
+		
+		testEventPlug.SendEvents()
+		
 		# check that the message went through
-		UUnitAssert.EqualInt(2, callbackQueue.Length, "there should be 1 callback in the callback queue after the event Send")
+		UUnitAssert.EqualInt(2, callbackQueue.Length, "there should be 2 callback in the callback queue after the event Send")
 		UUnitAssert.EqualString('OnNEvent_Test', callbackQueue[0].messageName, "make sure we got back the name of the action's event's message")
 		UUnitAssert.EqualInt(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
 		UUnitAssert.EqualDuck(-20, callbackQueue[0].args[0], "make sure we got back the same args we sent via the action's event")

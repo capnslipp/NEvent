@@ -32,6 +32,7 @@ class NEventAction (ScriptableObject):
 	enum Scope:
 		Local # sender GameObject
 		Children # sender & children
+		Descendents # sender & descendents
 		Parent # sender & parent
 		Ancestors # sender, parent, upwards
 		Specific # sender & a specific GameObject
@@ -46,16 +47,23 @@ class NEventAction (ScriptableObject):
 	scopeTag as string
 	
 	
-	def Send(sender as GameObject):
+	# @todo: store sender as owner
+	def Send(sender as GameObject) as void:
 		Send(sender, null)
 	
-	def Send(sender as GameObject, noteArg as object):
+	# @todo: store sender as owner
+	def Send(sender as GameObject, noteArg as object) as void:
 		Send(sender, (noteArg,))
 	
-	def Send(sender as GameObject, noteArgs as (object)):
+	# @todo: store sender as owner
+	def Send(sender as GameObject, noteArgs as (object)) as void:
+		# create the Event
+		
 		note = ScriptableObject.CreateInstance(noteType.ToString())
 		assert note.GetType().IsSubclassOf(NEventBase)
 		
+		
+		# populate the Event's data
 		
 		noteFields as (FieldInfo) = note.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
 		assert noteArgs.Length == noteFields.Length
@@ -65,90 +73,53 @@ class NEventAction (ScriptableObject):
 			noteField.SetValue(note, noteArgs[nI])
 		
 		
+		# figure out the event's target(s)
+		
+		targets as (GameObject) = (sender,)
+		
 		if scope == Scope.Local:
-			sender.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			pass
 			
 		elif scope == Scope.Children:
-			sender.BroadcastMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			for childTransform as Transform in sender.transform:
+				targets += (childTransform.gameObject,)
 			
 		elif scope == Scope.Parent:
-			sender.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
-			sender.transform.parent.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			targets += (sender.transform.parent.gameObject,)
 			
 		elif scope == Scope.Ancestors:
-			sender.transform.SendMessageUpwards(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			ancestorRef as Transform = sender.transform.parent
+			
+			while ancestorRef is not null:
+				targets += (ancestorRef.gameObject,)
+				ancestorRef = ancestorRef.parent
 			
 		elif scope == Scope.Specific:
 			assert scopeSpecificGO is not null
 			
-			sender.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
-			scopeSpecificGO.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			targets += (scopeSpecificGO,)
 			
 		elif scope == Scope.Named:
 			assert not String.IsNullOrEmpty(scopeName)
 			
-			sender.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
-			GameObject.Find(scopeName).SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			targets += (GameObject.Find(scopeName),)
 			
 		elif scope == Scope.Tagged:
 			assert not String.IsNullOrEmpty(scopeTag)
 			
-			sender.SendMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
-			
 			taggedGOs = GameObject.FindGameObjectsWithTag(scopeTag)
-			for taggedGO in taggedGOs:
-				taggedGO.SendMessage(
-					kReceiveMethodName,
-					note,
-					SendMessageOptions.DontRequireReceiver
-				)
+			targets += (taggedGOs)
 			
 		elif scope == Scope.Global:
-			GameObject.Find('/').BroadcastMessage(
-				kReceiveMethodName,
-				note,
-				SendMessageOptions.DontRequireReceiver
-			)
+			targets = array(GameObject, 0)
 			
 		else:
 			assert "unknown ${self.GetType()}.Scope ${scope.ToString()}"
+		
+		
+		# send the info off to the Plug (sender)
+		
+		# @todo: cache the NEventPlug ref
+		eventPlug as NEventPlug = sender.GetComponent(NEventPlug)
+		assert eventPlug is not null, "NEventPlug not found! There must be one attached to this GameObject."
+		eventPlug.PushNEvent(note, targets)
