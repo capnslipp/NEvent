@@ -11,7 +11,6 @@ import UnityEngine
 class NEventDispatch (MonoBehaviour):
 	## grabs function calls (likely Unity SendMessage calls) that match the correct pattern and re-sends them locally as On… calls
 	def ReceiveNEvent(note as NEventBase) as void:
-		
 		# find out how many public properties note has and package them up into an object array
 		noteFields as (FieldInfo) = note.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
 		if noteFields.Length == 1:
@@ -34,4 +33,10 @@ class NEventDispatch (MonoBehaviour):
 			)
 			
 		else:
-			assert noteFields.Length > 0
+			assert noteFields.Length == 0
+			
+			gameObject.SendMessage(
+				note.messageName,
+				null,
+				SendMessageOptions.DontRequireReceiver
+			)
