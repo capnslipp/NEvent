@@ -10,33 +10,47 @@ class NEventTest (UUnitTestCase):
 	public testEventPort as NEventPort
 	
 	public testEventDispatch as NEventDispatch
-	public testEventOnMessageCallbacker as NEventTestOnMessageCallbacker
 	
-	public testReaction as NEventTestDoNothingOnNEventTest
+	public testAbilityDock as NAbilityDock
+	public testReactionDock as NReactionDock
 	
+	
+	struct CallbackInfo:
+		messageName as string
+		args as (object)
+		
+		def ToString() as string:
+			argsString = ""
+			for arg in args:
+				argsString += ', ' unless String.IsNullOrEmpty(argsString)
+				argsString += arg.ToString()
+			
+			return "NEventTestOnMessageCallbacker: ${messageName}(${argsString})"
+	
+	public callbackQueue as (CallbackInfo) = array(CallbackInfo, 0)
+	
+	
+	
+	# utility methods
 	
 	def SetUp():
 		testGO = GameObject()
 		testGO.name = "${self.GetType()}GO"
 		testGO.transform.parent = GameObject.Find('/*Test').transform
 		
-		testEventPort = testGO.AddComponent( NEventPort )
+		testEventPort = testGO.AddComponent(NEventPort)
 		
-		testEventDispatch = testGO.AddComponent( NEventDispatch )
-		testEventOnMessageCallbacker = testGO.AddComponent( NEventTestOnMessageCallbacker )
-		testEventOnMessageCallbacker.callbacks += PrintOnMessageCallbacks
+		testEventDispatch = testGO.AddComponent(NEventDispatch)
 		
-		testReaction = testGO.AddComponent( NEventTestDoNothingOnNEventTest )
+		testAbilityDock = testGO.AddComponent(NAbilityDock)
+		testReactionDock = testGO.AddComponent(NReactionDock)
 	
 	
-	def PrintOnMessageCallbacks(messageName as string, args as (object)):
-		argsString = ""
+	def AddCallbackToQueue(messageName as string, args as (object)):
+		callbackInfo = CallbackInfo(messageName: messageName, args: args)
 		
-		for arg in args:
-			argsString += ', ' unless String.IsNullOrEmpty(argsString)
-			argsString += arg.ToString()
-		
-		Debug.Log("NEventTestOnMessageCallbacker: ${messageName}(${argsString})")
+		callbackQueue += (callbackInfo,)
+	
 	
 	
 	# test methods
@@ -113,8 +127,47 @@ class NEventTest (UUnitTestCase):
 	
 	
 	[UUnitTest]
-	def TestReactionNames():
+	def TestReaction():
+		testReaction = NEventTestCallbackOnNEventTest()
+		testReaction.callbacks += self.AddCallbackToQueue
+		testReactionDock.reactions += (testReaction as NReactionBase,)
+		
 		UUnitAssert.EqualString('NEventTest', testReaction.eventName, "NReaction eventName should match what's after the \"On\" in the class name")
 		
-		testEventAction = NEventAction( NEventTestEvent(value: 26) )
-		testEventAction.Send(testGO)
+		UUnitAssert.EqualInt(0, callbackQueue.Length, "there should be 0 callbacks in the callback queue before the event Send")
+		
+		# send the message via an action
+		testEventAction = NEventAction(NEventTestEvent)
+		testEventAction.Send(testGO, 26)
+		
+		# check that the message went through
+		UUnitAssert.EqualInt(1, callbackQueue.Length, "there should be 1 callback in the callback queue after the event Send")
+		UUnitAssert.EqualString('OnNEventTest', callbackQueue[0].messageName, "make sure we got back the name of the action's event's message")
+		UUnitAssert.EqualDuck(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualDuck(26, callbackQueue[0].args[0], "make sure we got back the same args we sent via the action's event")
+	
+	
+	[UUnitTest]
+	def TestAbility():
+		testReaction = NEventTestCallbackOnNEventTest()
+		testReaction.callbacks += self.AddCallbackToQueue
+		testReactionDock.reactions += (testReaction as NReactionBase,)
+		
+		testAbility = NEventTestAbility()
+		testAbility.owner = testAbilityDock.gameObject
+		testAbilityDock.abilities += (testAbility as NAbilityBase,)
+		
+		UUnitAssert.EqualInt(0, callbackQueue.Length, "there should be 0 callbacks in the callback queue before the event Send")
+		
+		# send the message via an ability change
+		testAbility.value = -20
+		testAbility.value = 20
+		
+		# check that the message went through
+		UUnitAssert.EqualInt(2, callbackQueue.Length, "there should be 1 callback in the callback queue after the event Send")
+		UUnitAssert.EqualString('OnNEventTest', callbackQueue[0].messageName, "make sure we got back the name of the action's event's message")
+		UUnitAssert.EqualDuck(1, callbackQueue[0].args.Length, "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualDuck(-20, callbackQueue[0].args[0], "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualString('OnNEventTest', callbackQueue[1].messageName, "make sure we got back the name of the action's event's message")
+		UUnitAssert.EqualDuck(1, callbackQueue[1].args.Length, "make sure we got back the same args we sent via the action's event")
+		UUnitAssert.EqualDuck(20, callbackQueue[1].args[0], "make sure we got back the same args we sent via the action's event")
