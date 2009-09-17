@@ -11,6 +11,16 @@ import UnityEditor
 
 class NEditorGUILayout:
 	static def DerivedTypeField(selectedType as Type, baseType as Type) as Type:
+		return DerivedTypeFieldWithNone(selectedType, baseType, 'None')
+	
+	static def DerivedTypeField(selectedType as Type, baseType as Type, noneEntry as string) as Type:
+		if not String.IsNullOrEmpty(noneEntry):
+			return DerivedTypeFieldWithNone(selectedType, baseType, noneEntry)
+		else:
+			return DerivedTypeFieldWithoutNone(selectedType, baseType)
+	
+	
+	static private def DerivedTypeFieldWithNone(selectedType as Type, baseType as Type, noneEntry as string) as Type:
 		derivedTypes as (Type) = FindDerivedTypes(baseType)
 		
 		selectedTypeIndex as int = Array.FindIndex(
@@ -19,13 +29,27 @@ class NEditorGUILayout:
 		)
 		newTypeIndex as int = EditorGUILayout.Popup(
 			selectedTypeIndex + 1,
-			('None',) + FindDerivedTypeNames(typeof(NReactionBase))
+			(noneEntry,) + FindDerivedTypeNames(typeof(NReactionBase))
 		) - 1
 		
 		if newTypeIndex < 0:
 			return null
 		else:
 			return derivedTypes[newTypeIndex]
+	
+	static private def DerivedTypeFieldWithoutNone(selectedType as Type, baseType as Type) as Type:
+		derivedTypes as (Type) = FindDerivedTypes(baseType)
+		
+		selectedTypeIndex as int = Array.FindIndex(
+			derivedTypes,
+			{ t as Type | t == selectedType }
+		)
+		newTypeIndex as int = EditorGUILayout.Popup(
+			selectedTypeIndex,
+			FindDerivedTypeNames(typeof(NReactionBase))
+		)
+		
+		return derivedTypes[newTypeIndex]
 	
 	
 	static private def FindDerivedTypeNames(baseType as Type) as (string):
