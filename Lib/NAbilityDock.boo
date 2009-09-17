@@ -10,16 +10,19 @@ import UnityEngine
 
 
 class NAbilityDock (MonoBehaviour, IEnumerable):
-	# keys are Types
-	# values are instances of classes derived from NAbilityBase
-	_abilities as Hash = {}
-	
+	public abilities as (NAbilityBase) = array(NAbilityBase, 0)
 	
 	def HasAbility(abilityType as Type) as bool:
-		return _abilities.ContainsKey(abilityType)
+		for ability as NAbilityBase in abilities:
+			if ability.GetType() == abilityType:
+				return true
+		return false
 	
 	def GetAbility(abilityType as Type) as NAbilityBase:
-		return _abilities[abilityType]
+		for ability as NAbilityBase in abilities:
+			if ability.GetType() == abilityType:
+				return ability
+		return null
 	
 	def AddAbility(abilityType as Type) as NAbilityBase:
 		assert abilityType.IsSubclassOf(NAbilityBase)
@@ -29,13 +32,13 @@ class NAbilityDock (MonoBehaviour, IEnumerable):
 		abilityType as Type = abilityToAdd.GetType()
 		assert not HasAbility(abilityType)
 		abilityToAdd.owner = gameObject
-		_abilities[abilityType] = abilityToAdd
+		abilities += (abilityToAdd,)
 	
 	
 	# IEnumerable
 	
 	def GetEnumerator() as IEnumerator:
-		return Enumerator(_abilities.Values);
+		return Enumerator(abilities);
 	
 	class Enumerator (IEnumerator):
 		_abilities as (NAbilityBase)
