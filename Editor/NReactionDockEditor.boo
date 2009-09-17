@@ -21,15 +21,22 @@ class NReactionDockEditor (Editor):
 		
 		# element fields
 		for listElement as NReactionBase in targetElementList:
-			resultElement = LayoutElement(listElement)
+			resultElement = LayOutElement(listElement)
 			if resultElement is not listElement:
 				listHasBeenModified = true
 				listElement = resultElement
 		
 		
 		# create field
-		if LayoutCreate(targetElementList):
+		if LayOutCreate(targetElementList):
 			listHasBeenModified = true
+		
+		
+		# clean up: destory objects that were marked to be removed
+		if _elementsToRemove.Length != 0:
+			for removeElement as NReactionBase in _elementsToRemove:
+				targetElementList.Remove(removeElement)
+				ScriptableObject.DestroyImmediate(removeElement) # to prevent leaks
 		
 		
 		if listHasBeenModified:
@@ -38,15 +45,9 @@ class NReactionDockEditor (Editor):
 			
 			# send the array back
 			target.reactions = array(NReactionBase, targetElementList)
-			
-			# clean up: destory objects that were marked to be removed
-			if _elementsToRemove.Length != 0:
-				for removeElement as NReactionBase in _elementsToRemove:
-					targetElementList.Remove(removeElement)
-					ScriptableObject.DestroyImmediate(removeElement) # to prevent leaks
 	
 	
-	private def LayoutElement(element as NReactionBase) as NReactionBase:
+	private def LayOutElement(element as NReactionBase) as NReactionBase:
 		EditorGUILayout.BeginHorizontal()
 		
 		elementType as Type = element.GetType()
@@ -62,7 +63,7 @@ class NReactionDockEditor (Editor):
 			return null
 	
 	
-	private def LayoutCreate(elementList as List) as bool:
+	private def LayOutCreate(elementList as List) as bool:
 		didCreate as bool
 		
 		EditorGUILayout.BeginHorizontal()
