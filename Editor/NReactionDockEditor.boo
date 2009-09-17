@@ -4,7 +4,7 @@
 
 
 import System
-#import System.Reflection
+import System.Collections
 import UnityEditor
 import UnityEngine
 
@@ -33,6 +33,8 @@ class NReactionDockEditor (Editor):
 				for oldI as int in range(origLength - newLength):
 					targetReactionsList.Pop()
 			
+			targetReactionsList.Sort(TypeNameSortComparer())
+			
 			target.reactions = array(NReactionBase, targetReactionsList)
 			
 			EditorGUILayout.EndHorizontal()
@@ -45,6 +47,18 @@ class NReactionDockEditor (Editor):
 				target.reactions[listI] = EditableGUILayoutForValue(target.reactions[listI])
 				
 				EditorGUILayout.EndHorizontal()
+	
+	
+	class TypeNameSortComparer (IComparer):
+		def IComparer.Compare(early as object, late as object) as int:
+			if early is null and late is null:
+				return 0
+			elif early is null:
+				return 1
+			elif late is null:
+				return -1
+			else:
+				return early.GetType().Name.CompareTo( late.GetType().Name )
 	
 	
 	#private def viewableGUILayoutForValue(fieldValue as NReactionBase) as void:
