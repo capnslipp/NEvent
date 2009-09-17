@@ -6,7 +6,7 @@
 import System
 #import System.Reflection
 import UnityEditor
-#import UnityEngine
+import UnityEngine
 
 
 [CustomEditor(NReactionDock)]
@@ -30,7 +30,7 @@ class NReactionDockEditor (Editor):
 			for listI as int in range(target.reactions.Length):
 				EditorGUILayout.BeginHorizontal()
 				EditorGUILayout.PrefixLabel("Element ${listI}")
-				EditableGUILayoutForValue(target.reactions[listI])
+				target.reactions[listI] = EditableGUILayoutForValue(target.reactions[listI])
 				EditorGUILayout.EndHorizontal()
 	
 	
@@ -38,26 +38,16 @@ class NReactionDockEditor (Editor):
 	#	GUILayout.Label( fieldValue.GetType().ToString() )
 	
 	
-	private def EditableGUILayoutForValue(fieldValue as NReactionBase) as void:
-		SubTypeField(fieldValue.GetType(), typeof(NReactionBase))
-	
-	
-	private def SubTypeField(selectedType as Type, baseType as Type) as Type:
-		EditorGUILayout.Popup(
-			0,
-			('None',) + SubTypeNames(typeof(NReactionBase))
-		)
-	
-	
-	private def SubTypeNames(baseType as Type) as (string):
-		typeNames as (string) = array(string, 0)
-		for type as Type in FindDerivedTypes(NReactionBase):
-			typeNames += (type.Name,)
-		return typeNames
-	
-	
-	private def FindDerivedTypes(baseType as Type) as (Type):
-		return baseType.Module.FindTypes(DerivedTypeFilter, baseType)
-	
-	private def DerivedTypeFilter(m as Type, filterCriteria as object) as bool:
-		return m.IsSubclassOf(filterCriteria as Type)
+	private def EditableGUILayoutForValue(fieldValue as NReactionBase) as NReactionBase:
+		fieldValueType as Type
+		fieldValueType = fieldValue.GetType() if fieldValue is not null
+		
+		resultType = NEditorGUILayout.DerivedTypeField(fieldValueType, typeof(NReactionBase))
+		
+		if fieldValueType == resultType:
+			return fieldValue
+		else:
+			if resultType is null:
+				return null
+			else:
+				return ScriptableObject().CreateInstance(resultType.ToString())
