@@ -10,13 +10,19 @@ import UnityEngine
 
 
 class NReactionDock (MonoBehaviour):
-	_reactions as Hash = {}
+	public reactions as (NReactionBase) = array(NReactionBase, 0)
 	
 	def HasReaction(reactionType as Type) as bool:
-		return _reactions.ContainsKey(reactionType)
+		for reaction as NReactionBase in reactions:
+			if reaction.GetType() == reactionType:
+				return true
+		return false
 	
 	def GetReaction(reactionType as Type) as NReactionBase:
-		return _reactions[reactionType]
+		for reaction as NReactionBase in reactions:
+			if reaction.GetType() == reactionType:
+				return reaction
+		return null
 	
 	def AddReaction(reactionType as Type) as NReactionBase:
 		assert reactionType.IsSubclassOf(NReactionBase)
@@ -26,13 +32,13 @@ class NReactionDock (MonoBehaviour):
 		reactionType as Type = reactionToAdd.GetType()
 		assert not HasReaction(reactionType)
 		reactionToAdd.owner = gameObject
-		_reactions[reactionType] = reactionToAdd
+		reactions += (reactionToAdd,)
 	
 	
 	# IEnumerable
 	
 	def GetEnumerator() as IEnumerator:
-		return Enumerator(_reactions.Values);
+		return Enumerator(reactions);
 	
 	class Enumerator (IEnumerator):
 		_reactions as (NReactionBase)
@@ -64,12 +70,10 @@ class NReactionDock (MonoBehaviour):
 	def ReceiveNEvent(note as NEventBase) as void:
 		# find out how many public properties note has and package them up into an object array
 		noteFields as (FieldInfo) = note.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
-		reaction as NReactionBase
 		reactionMethodInfo as MethodInfo
 		
 		if noteFields.Length == 1: 
-			for reactionEntry as DictionaryEntry in _reactions:
-				reaction = reactionEntry.Value
+			for reaction as NReactionBase in reactions:
 				reactionMethodInfo = reaction.GetType().GetMethod( note.messageName )
 				assert reactionMethodInfo is not null
 				reactionMethodInfo.Invoke(reaction, (noteFields[0].GetValue(note),))
@@ -80,8 +84,7 @@ class NReactionDock (MonoBehaviour):
 			for noteField as FieldInfo in noteFields:
 				messageArgs += (noteField.GetValue(note),)
 			
-			for reactionEntry as DictionaryEntry in _reactions:
-				reaction = reactionEntry.Value
+			for reaction as NReactionBase in reactions:
 				reactionMethodInfo = reaction.GetType().GetMethod( note.messageName )
 				assert reactionMethodInfo is not null
 				reactionMethodInfo.Invoke(reaction, messageArgs)
@@ -89,8 +92,7 @@ class NReactionDock (MonoBehaviour):
 		else:
 			assert noteFields.Length == 0
 			
-			for reactionEntry as DictionaryEntry in _reactions:
-				reaction = reactionEntry.Value
+			for reaction as NReactionBase in reactions:
 				reactionMethodInfo = reaction.GetType().GetMethod( note.messageName )
 				assert reactionMethodInfo is not null
 				reactionMethodInfo.Invoke(reaction, null)
