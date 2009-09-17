@@ -29,13 +29,14 @@ class NEditorGUILayout:
 		)
 		newTypeIndex as int = EditorGUILayout.Popup(
 			selectedTypeIndex + 1,
-			(noneEntry,) + FindDerivedTypeNames(typeof(NReactionBase))
+			(noneEntry,) + FindDerivedTypeNames(baseType)
 		) - 1
 		
 		if newTypeIndex < 0:
 			return null
 		else:
 			return derivedTypes[newTypeIndex]
+	
 	
 	static private def DerivedTypeFieldWithoutNone(selectedType as Type, baseType as Type) as Type:
 		derivedTypes as (Type) = FindDerivedTypes(baseType)
@@ -46,7 +47,7 @@ class NEditorGUILayout:
 		)
 		newTypeIndex as int = EditorGUILayout.Popup(
 			selectedTypeIndex,
-			FindDerivedTypeNames(typeof(NReactionBase))
+			FindDerivedTypeNames(baseType)
 		)
 		
 		return derivedTypes[newTypeIndex]
@@ -54,7 +55,7 @@ class NEditorGUILayout:
 	
 	static private def FindDerivedTypeNames(baseType as Type) as (string):
 		typeNames as (string) = array(string, 0)
-		for type as Type in FindDerivedTypes(NReactionBase):
+		for type as Type in FindDerivedTypes(baseType):
 			typeNames += (type.Name,)
 		return typeNames
 	
