@@ -4,53 +4,60 @@
 
 
 import System
-import System.Reflection
+#import System.Reflection
 import UnityEditor
 #import UnityEngine
 
 
 [CustomEditor(NReactionDock)]
 class NReactionDockEditor (Editor):
+	_listIsExpanded as bool = true
+	
+	
 	def OnInspectorGUI():
-		targetType as System.Type = target.GetType()
-		targetFields as (FieldInfo) = targetType.GetFields(BindingFlags.Public | BindingFlags.Instance)
-		
-		for field as FieldInfo in targetFields:
+		_listIsExpanded = EditorGUILayout.Foldout(_listIsExpanded, 'Reactions')
+		if _listIsExpanded:
 			EditorGUILayout.BeginHorizontal()
-			EditorGUILayout.PrefixLabel(field.Name)
-			field.SetValue(target, editorGUILayoutForValue(field.GetValue(target)))
+			EditorGUILayout.PrefixLabel('Size')
+			origLength as int = target.reactions.Length
+			newLength as int = EditorGUILayout.IntField(origLength)
+			if newLength > origLength:
+				target.reactions += array(NReactionBase, newLength - origLength)
+			elif origLength > newLength:
+				target.reactions = (target.reactions as (NReactionBase))[:newLength]
 			EditorGUILayout.EndHorizontal()
-	
-	
-	private def editorGUILayoutForValue(fieldValue as object) as object:
- 		# built-ins
-		
-		if fieldValue isa System.Int32:
-			return EditorGUILayout.IntField(fieldValue)
-		
-		if fieldValue isa System.Single:
-			 return EditorGUILayout.FloatField(fieldValue)
-		
-		if fieldValue isa System.Array:
-			fieldElementType as Type = fieldValue.GetType().GetElementType()
-			castedFieldValue = fieldValue as (object)
-			resultFieldValue as List = List()
 			
-			for fieldSubI in range(0, castedFieldValue.Length):
+			for listI as int in range(target.reactions.Length):
 				EditorGUILayout.BeginHorizontal()
-				EditorGUILayout.PrefixLabel(fieldSubI.ToString())
-				resultFieldValue.Add(
-					editorGUILayoutForValue( castedFieldValue[fieldSubI] )
-				)
+				EditorGUILayout.PrefixLabel("Element ${listI}")
+				EditableGUILayoutForValue(target.reactions[listI])
 				EditorGUILayout.EndHorizontal()
-			
-			return array(fieldElementType, resultFieldValue)
-		
-		
-		# Custom
-		
-		#if fieldValue isa Percentage:
-		#	 return Percentage( EditorGUILayout.Slider(fieldValue.level, 0, 100) )
-		
-		
-		return EditorGUILayout.TextField(fieldValue)
+	
+	
+	#private def viewableGUILayoutForValue(fieldValue as NReactionBase) as void:
+	#	GUILayout.Label( fieldValue.GetType().ToString() )
+	
+	
+	private def EditableGUILayoutForValue(fieldValue as NReactionBase) as void:
+		SubTypeField(fieldValue.GetType(), typeof(NReactionBase))
+	
+	
+	private def SubTypeField(selectedType as Type, baseType as Type) as Type:
+		EditorGUILayout.Popup(
+			0,
+			('None',) + SubTypeNames(typeof(NReactionBase))
+		)
+	
+	
+	private def SubTypeNames(baseType as Type) as (string):
+		typeNames as (string) = array(string, 0)
+		for type as Type in FindDerivedTypes(NReactionBase):
+			typeNames += (type.Name,)
+		return typeNames
+	
+	
+	private def FindDerivedTypes(baseType as Type) as (Type):
+		return baseType.Module.FindTypes(DerivedTypeFilter, baseType)
+	
+	private def DerivedTypeFilter(m as Type, filterCriteria as object) as bool:
+		return m.IsSubclassOf(filterCriteria as Type)
