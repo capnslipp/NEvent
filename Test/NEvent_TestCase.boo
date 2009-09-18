@@ -40,7 +40,7 @@ class NEvent_TestCase (UUnitTestCase):
 		testGO.transform.parent = GameObject.Find('/*Test').transform
 		
 		testEventPlug = testGO.AddComponent(NEventPlug)
-		testEventPlug.autoSends = false
+		testEventPlug.enabled = false
 		testEventSocket = testGO.AddComponent(NEventSocket)
 		
 		testEventDispatch = testGO.AddComponent(NEventDispatch)

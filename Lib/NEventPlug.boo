@@ -22,11 +22,8 @@ class NEventPlug (MonoBehaviour):
 			return _eventBuffer.Length
 	
 	
-	public autoSends as bool = true
-	
-	
 	def Update() as void:
-		Send() if autoSends
+		Send() if enabled
 	
 	
 	def PushNEvent(note as NEventBase, targets as (GameObject)) as void:
@@ -41,7 +38,7 @@ class NEventPlug (MonoBehaviour):
 	
 	
 	def SendEvents() as void:
-		assert not autoSends, "This NEventPlug auto-sends, direct SendEvents() calls are not allowed."
+		assert not enabled, "This NEventPlug auto-sends (since it is enabled), direct SendEvents() calls are not allowed."
 		Send()
 	
 	
