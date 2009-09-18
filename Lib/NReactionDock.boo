@@ -12,6 +12,12 @@ import UnityEngine
 class NReactionDock (MonoBehaviour):
 	public reactions as (NReactionBase) = array(NReactionBase, 0)
 	
+	
+	def Awake():
+		for reaction in reactions:
+			reaction.owner = gameObject
+	
+	
 	def HasReaction(reactionType as Type) as bool:
 		for reaction as NReactionBase in reactions:
 			if reaction.GetType() == reactionType:

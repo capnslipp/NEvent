@@ -12,6 +12,12 @@ import UnityEngine
 class NAbilityDock (MonoBehaviour, IEnumerable):
 	public abilities as (NAbilityBase) = array(NAbilityBase, 0)
 	
+	
+	def Awake():
+		for ability in abilities:
+			ability.owner = gameObject
+	
+	
 	def HasAbility(abilityType as Type) as bool:
 		for ability as NAbilityBase in abilities:
 			if ability.GetType() == abilityType:
