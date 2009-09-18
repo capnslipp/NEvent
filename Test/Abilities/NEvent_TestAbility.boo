@@ -7,7 +7,7 @@ class NEvent_TestAbility (NAbilityBase):
 	public initialValue as int
 	
 	_value as int = 0
-	value:
+	value as int:
 		get:
 			return _value
 		set:
