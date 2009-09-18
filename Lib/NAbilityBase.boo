@@ -14,7 +14,11 @@ abstract class NAbilityBase (ScriptableObject):
 	
 	
 	# allows derived classes access to the handy GameObject and Component accessors
-	public owner as GameObject
+	_owner as GameObject
+	owner:
+		set:
+			assert value is not null
+			_owner = value
 	
 	
 	def constructor():
@@ -26,8 +30,8 @@ abstract class NAbilityBase (ScriptableObject):
 	
 	gameObject as GameObject:
 		get:
-			assert owner is not null
-			return owner
+			assert _owner is not null
+			return _owner
 	
 	
 	# When sub-classing, add any data you like!
