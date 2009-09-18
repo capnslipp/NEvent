@@ -65,7 +65,7 @@ class NEventAction:
 		
 		# create the Event
 		
-		note = noteType()
+		note as NEventBase = noteType()
 		assert note.GetType().IsSubclassOf(NEventBase)
 		
 		
@@ -82,6 +82,7 @@ class NEventAction:
 		# figure out the event's target(s)
 		
 		targets as (GameObject) = (sender,)
+		global as bool = false
 		
 		if scope == Scope.Local:
 			pass
@@ -118,6 +119,7 @@ class NEventAction:
 			
 		elif scope == Scope.Global:
 			targets = array(GameObject, 0)
+			global = true
 			
 		else:
 			assert "unknown ${self.GetType()}.Scope ${scope.ToString()}"
@@ -127,5 +129,10 @@ class NEventAction:
 		
 		# @todo: cache the NEventPlug ref
 		eventPlug as NEventPlug = sender.GetComponent(NEventPlug)
-		assert eventPlug is not null, "NEventPlug not found! There must be one attached to this GameObject."
-		eventPlug.PushNEvent(note, targets)
+		
+		# if an event plug is available, use it
+		if eventPlug is not null:
+			eventPlug.PushNEvent(note, targets, global)
+		# otherwise, just send the event immediately
+		else:
+			note.Send(targets, global)

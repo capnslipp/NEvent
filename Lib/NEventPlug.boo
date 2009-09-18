@@ -47,24 +47,7 @@ class NEventPlug (MonoBehaviour):
 		eventsToSend = Flush()
 		
 		for eventEnvelope as Envelope in eventsToSend:
-			# normal-case: send to the specified targets
-			if eventEnvelope.targets.Length > 0:
-				for target as GameObject in eventEnvelope.targets:
-					gameObject.SendMessage(
-						NEventBase.kReceiveMethodName,
-						eventEnvelope.note,
-						SendMessageOptions.DontRequireReceiver
-					)
-			# special-case: send globally to all GameObjects
-			elif eventEnvelope.global == true:
-				GameObject.Find('/').BroadcastMessage(
-					NEventBase.kReceiveMethodName,
-					eventEnvelope.note,
-					SendMessageOptions.DontRequireReceiver
-				)
-			# invalid-case
-			else:
-				assert false, "either targets must be specified or the message must be global, but not neither or both"
+			eventEnvelope.note.Send(eventEnvelope.targets, eventEnvelope.global)
 	
 	
 	## clears out all the old events (returning nothing)
