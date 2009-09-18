@@ -13,7 +13,7 @@ class NReactionDock (MonoBehaviour):
 	public reactions as (NReactionBase) = array(NReactionBase, 0)
 	
 	
-	def Awake():
+	def Awake() as void:
 		for reaction in reactions:
 			reaction.owner = gameObject
 	
@@ -32,13 +32,14 @@ class NReactionDock (MonoBehaviour):
 	
 	def AddReaction(reactionType as Type) as NReactionBase:
 		assert reactionType.IsSubclassOf(NReactionBase)
-		AddReaction( ScriptableObject.CreateInstance(reactionType.ToString()) )
+		return AddReaction( ScriptableObject.CreateInstance(reactionType.ToString()) )
 	
 	def AddReaction(reactionToAdd as NReactionBase) as NReactionBase:
 		reactionType as Type = reactionToAdd.GetType()
 		assert not HasReaction(reactionType)
 		reactionToAdd.owner = gameObject
 		reactions += (reactionToAdd,)
+		return reactionToAdd
 	
 	
 	# IEnumerable

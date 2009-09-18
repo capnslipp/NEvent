@@ -14,7 +14,7 @@ class NAbilityDock (MonoBehaviour, IEnumerable):
 	public abilities as (NAbilityBase) = array(NAbilityBase, 0)
 	
 	
-	def Awake():
+	def Awake() as void:
 		for ability in abilities:
 			ability.owner = gameObject
 	
@@ -33,13 +33,14 @@ class NAbilityDock (MonoBehaviour, IEnumerable):
 	
 	def AddAbility(abilityType as Type) as NAbilityBase:
 		assert abilityType.IsSubclassOf(NAbilityBase)
-		AddAbility( ScriptableObject.CreateInstance(abilityType.ToString()) )
+		return AddAbility( ScriptableObject.CreateInstance(abilityType.ToString()) )
 	
 	def AddAbility(abilityToAdd as NAbilityBase) as NAbilityBase:
 		abilityType as Type = abilityToAdd.GetType()
 		assert not HasAbility(abilityType)
 		abilityToAdd.owner = gameObject
 		abilities += (abilityToAdd,)
+		return abilityToAdd
 	
 	
 	# IEnumerable
