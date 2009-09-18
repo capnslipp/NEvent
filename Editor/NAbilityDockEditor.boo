@@ -5,31 +5,55 @@
 
 import System
 import System.Collections
+import System.Reflection
 import UnityEditor
 import UnityEngine
 
 
 [CustomEditor(NAbilityDock)]
 class NAbilityDockEditor (Editor):
+	static final kPubFieldBindingFlags as BindingFlags = BindingFlags.Public | BindingFlags.Instance
+	#static final kPrivFieldBindingFlags as BindingFlags = BindingFlags.NonPublic | BindingFlags.Instance
+	#static final kPubAndPrivFieldBindingFlags as BindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
+	#static final kPropertyBindingFlags as BindingFlags = BindingFlags.Public | BindingFlags.Instance
+	
+	static final kLabelStyle as GUIStyle
+	
+	static def constructor():
+		kLabelStyle = GUIStyle(
+			margin: RectOffset(left: 20),
+			padding: RectOffset(),
+			alignment: TextAnchor.MiddleLeft,
+			fixedWidth: 150,
+			stretchWidth: false
+		)
+	
+	
 	_elementsToRemove as (NAbilityBase) = array(NAbilityBase, 0)
 	
 	
 	def OnInspectorGUI():
 		targetElementList as List = List(target.abilities as (NAbilityBase))
 		listHasBeenModified as bool = false
+		needsSort as bool = false
+		
+		
+		# create field
+		if LayOutCreateWidget(targetElementList):
+			needsSort = true
+			listHasBeenModified = true
 		
 		
 		# element fields
 		for listElement as NAbilityBase in targetElementList:
+			continue if listElement is null
+			
+			#EditorGUILayout.Separator()
 			resultElement = LayOutElement(listElement)
+			EditorGUILayout.Separator()
 			if resultElement is not listElement:
 				listHasBeenModified = true
 				listElement = resultElement
-		
-		
-		# create field
-		if LayOutCreate(targetElementList):
-			listHasBeenModified = true
 		
 		
 		# clean up: destory objects that were marked to be removed
@@ -40,8 +64,8 @@ class NAbilityDockEditor (Editor):
 		
 		
 		if listHasBeenModified:
-			# sort
-			targetElementList.Sort(TypeNameSortComparer())
+			if needsSort:
+				targetElementList.Sort(TypeNameSortComparer())
 			
 			# send the array back
 			target.abilities = array(NAbilityBase, targetElementList)
@@ -50,33 +74,94 @@ class NAbilityDockEditor (Editor):
 	private def LayOutElement(element as NAbilityBase) as NAbilityBase:
 		EditorGUILayout.BeginHorizontal()
 		
-		elementType as Type = element.GetType()
-		GUILayout.Label(elementType.Name)
+		EditorGUILayout.Foldout(true, ObjectNames.NicifyVariableName(element.abilityName))
+		#GUILayout.Label()
 		
 		destroyPressed as bool = GUILayout.Button('Destory', GUILayout.Width(60))
-		if destroyPressed:
-			_elementsToRemove += (element,)
 		
 		EditorGUILayout.EndHorizontal()
 		
 		if destroyPressed:
+			_elementsToRemove += (element,)
 			return null
 		else:
+			element = LayOutElementFields(element)
 			return element
 	
 	
-	private def LayOutCreate(elementList as List) as bool:
+	private def LayOutElementFields(element as NAbilityBase) as NAbilityBase:
+		origValue as object
+		resultValue as object
+		
+		pubElementFields as (FieldInfo) = element.GetType().GetFields(kPubFieldBindingFlags)
+		for field as FieldInfo in pubElementFields:
+			if typeof(NAbilityBase).GetField(field.Name, kPubFieldBindingFlags):
+				continue
+			
+			EditorGUILayout.BeginHorizontal()
+			GUILayout.Label(ObjectNames.NicifyVariableName(field.Name), kLabelStyle)
+			
+			origValue = field.GetValue(element)
+			resultValue = NEditorGUILayout.AutoField(origValue)
+			#if resultValue.GetType() == origValue.GetType():
+			try:
+				field.SetValue(element, resultValue)
+			except e as Exception:
+				pass
+			
+			EditorGUILayout.EndHorizontal()
+		
+		# private fields get set back to 0 when the game starts (probably a Unity thing)
+		#privElementFields as (FieldInfo) = element.GetType().GetFields(kPrivFieldBindingFlags)
+		#for field as FieldInfo in privElementFields:
+		#	if typeof(NReactionBase).GetField(field.Name, kPubAndPrivFieldBindingFlags):
+		#		continue
+		#	
+		#	EditorGUILayout.BeginHorizontal()
+		#	GUILayout.Label("(initial) ${ObjectNames.NicifyVariableName(field.Name)}", kLabelStyle)
+		#	
+		#	origValue = field.GetValue(element)
+		#	resultValue = NEditorGUILayout.AutoField(origValue)
+		#	#if resultValue.GetType() == field.GetType():
+		#	try:
+		#		field.SetValue(element, resultValue)
+		#	except e as Exception:
+		#		pass
+		#	
+		#	EditorGUILayout.EndHorizontal()
+		
+		# setting properties cause all kind of problems since the property can trigger other stuff to happen
+		#elementProperties as (PropertyInfo) = element.GetType().GetProperties(kPropertyBindingFlags)
+		#for property as PropertyInfo in elementProperties:
+		#	if typeof(NAbilityBase).GetProperty(property.Name, kPropertyBindingFlags):
+		#		continue
+		#	
+		#	EditorGUILayout.BeginHorizontal()
+		#	EditorGUILayout.PrefixLabel(ObjectNames.NicifyVariableName(property.Name))
+		#	
+		#	origValue = property.GetValue(element, null)
+		#	resultValue = NEditorGUILayout.AutoField(origValue)
+		#	if resultValue.GetType() == origValue.GetType():
+		#		property.SetValue(element, resultValue, null)
+		#	
+		#	EditorGUILayout.EndHorizontal()
+		#	EditorGUILayout.Separator()
+		
+		return element
+	
+	
+	private def LayOutCreateWidget(elementList as List) as bool:
 		didCreate as bool
 		
 		EditorGUILayout.BeginHorizontal()
-		EditorGUILayout.PrefixLabel('Create')
+		GUILayout.Label('Create', GUILayout.Width(50))
 		
 		createType as Type = NEditorGUILayout.DerivedTypeField(null, typeof(NAbilityBase), '\t')
-		#createPressed as bool = GUILayout.Button('Create')
 		
 		if createType is not null:
 			didCreate = true
-			elementList.Add( ScriptableObject().CreateInstance(createType.ToString()) )
+			createdElement as NAbilityBase = ScriptableObject().CreateInstance(createType.ToString())
+			elementList.Add(createdElement)
 		else:
 			didCreate = false
 		
@@ -87,11 +172,11 @@ class NAbilityDockEditor (Editor):
 	
 	class TypeNameSortComparer (IComparer):
 		def IComparer.Compare(early as object, late as object) as int:
-			if early is null and late is null:
-				return 0
-			elif early is null:
-				return 1
-			elif late is null:
-				return -1
+			if early.GetType() == late.GetType():
+				return (early as UnityEngine.Object).GetInstanceID().CompareTo(
+					(late as UnityEngine.Object).GetInstanceID()
+				)
 			else:
-				return early.GetType().Name.CompareTo( late.GetType().Name )
+				return early.GetType().Name.CompareTo(
+					late.GetType().Name
+				)
