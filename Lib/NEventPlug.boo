@@ -41,8 +41,9 @@ class NEventPlug (MonoBehaviour):
 	
 	
 	def SendEvents() as void:
-		assert not autoSends, "This NEventPlug auto-sends, direct SendEvents() are not allowed."
+		assert not autoSends, "This NEventPlug auto-sends, direct SendEvents() calls are not allowed."
 		Send()
+	
 	
 	## sends out all the events (removing them from the buffer) and starts waiting for new ones
 	private def Send() as void:
