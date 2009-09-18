@@ -5,10 +5,10 @@
 
 import System
 #import System.Reflection
-import UnityEngine
+#import UnityEngine
 
 
-abstract class NEventBase (ScriptableObject):
+abstract class NEventBase:
 	public static final kReceiveMethodName = 'ReceiveNEvent'
 	
 	
