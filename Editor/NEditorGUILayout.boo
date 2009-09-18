@@ -6,7 +6,7 @@
 import System
 #import System.Reflection
 import UnityEditor
-#import UnityEngine
+import UnityEngine
 
 
 class NEditorGUILayout:
@@ -65,3 +65,39 @@ class NEditorGUILayout:
 	
 	static private def DerivedTypeFilter(m as Type, filterCriteria as object) as bool:
 		return m.IsSubclassOf(filterCriteria as Type)
+	
+	
+	static def AutoField(fieldValue as object) as object:
+		if fieldValue isa int:
+			return EditorGUILayout.IntField(fieldValue)
+		
+		if fieldValue isa single or fieldValue isa double:
+			return EditorGUILayout.FloatField(fieldValue)
+		
+		if fieldValue isa string:
+			return EditorGUILayout.TextField(fieldValue)
+		
+		if fieldValue isa Vector2:
+			return EditorGUILayout.Vector2Field('', cast(Vector2, fieldValue))
+		
+		if fieldValue isa Vector3:
+			return EditorGUILayout.Vector3Field('', cast(Vector3, fieldValue))
+		
+		if fieldValue isa Vector4:
+			return EditorGUILayout.Vector4Field('', cast(Vector4, fieldValue))
+		
+		if fieldValue isa Rect:
+			return EditorGUILayout.RectField(cast(Rect, fieldValue))
+		
+		if fieldValue isa Color:
+			return EditorGUILayout.ColorField(cast(Color, fieldValue))
+		
+		if fieldValue isa UnityEngine.Object:
+			return EditorGUILayout.ObjectField(fieldValue as UnityEngine.Object, fieldValue.GetType())
+		
+		
+		# read-only field
+		fieldValueString as string = 'Null'
+		fieldValueString = fieldValue.ToString() if fieldValue is not null
+		GUILayout.Label(fieldValueString)
+		return fieldValueString
