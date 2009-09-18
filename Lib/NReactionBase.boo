@@ -9,6 +9,9 @@ import UnityEngine
 
 
 abstract class NReactionBase (ScriptableObject):
+	[Getter(reactionName)]
+	final _reactionName as string
+	
 	[Getter(eventName)]
 	final _eventName as string
 	
@@ -23,7 +26,9 @@ abstract class NReactionBase (ScriptableObject):
 		
 		onCharIndex as int = typeName.LastIndexOf('On')
 		assert onCharIndex != -1
-		_eventName = typeName.Substring(onCharIndex + 2)
+		_reactionName = typeName[:onCharIndex]
+		assert not String.IsNullOrEmpty(_reactionName)
+		_eventName = typeName[onCharIndex + 2:]
 		assert not String.IsNullOrEmpty(_eventName)
 		
 		methods as (MethodInfo) = self.GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance)
