@@ -61,6 +61,8 @@ class NAbilityDockEditor (Editor):
 		
 		if destroyPressed:
 			return null
+		else:
+			return element
 	
 	
 	private def LayOutCreate(elementList as List) as bool:
