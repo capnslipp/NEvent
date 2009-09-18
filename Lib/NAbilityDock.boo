@@ -9,6 +9,7 @@ import System.Collections
 import UnityEngine
 
 
+[RequireComponent(NEventPlug)]
 class NAbilityDock (MonoBehaviour, IEnumerable):
 	public abilities as (NAbilityBase) = array(NAbilityBase, 0)
 	
