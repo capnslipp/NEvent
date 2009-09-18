@@ -8,8 +8,12 @@ import System.Reflection
 import UnityEngine
 
 
-class NEventAction (ScriptableObject):
+class NEventAction:
 	final public noteType as Type
+	
+	
+	[Getter(name)]
+	_name as string
 	
 	
 	messageName as string:
@@ -26,7 +30,7 @@ class NEventAction (ScriptableObject):
 		assert noteType.IsSubclassOf(NEventBase)
 		
 		# @todo: bad, bad, bad; must find a cleaner way to do this!
-		name = (noteType() as NEventBase).name
+		_name = (noteType() as NEventBase).name
 	
 	
 	enum Scope:
@@ -57,9 +61,11 @@ class NEventAction (ScriptableObject):
 	
 	# @todo: store sender as owner
 	def Send(sender as GameObject, noteArgs as (object)) as void:
+		assert sender is not null
+		
 		# create the Event
 		
-		note = ScriptableObject.CreateInstance(noteType.ToString())
+		note = noteType()
 		assert note.GetType().IsSubclassOf(NEventBase)
 		
 		
