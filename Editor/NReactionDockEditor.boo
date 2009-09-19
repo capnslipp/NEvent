@@ -103,7 +103,7 @@ class NReactionDockEditor (Editor):
 			GUILayout.Label(ObjectNames.NicifyVariableName(field.Name), kLabelStyle)
 			
 			origValue = field.GetValue(element)
-			resultValue = NEditorGUILayout.AutoField(origValue, field.FieldType)
+			resultValue = NEventEditorGUILayout.AutoField(origValue, field.FieldType)
 			
 			try:
 				field.SetValue(element, resultValue)
@@ -125,7 +125,7 @@ class NReactionDockEditor (Editor):
 		EditorGUILayout.BeginHorizontal()
 		GUILayout.Label('Create', GUILayout.Width(50))
 		
-		createType as Type = NEditorGUILayout.DerivedTypeField(null, typeof(NReactionBase), '\t')
+		createType as Type = NEventEditorGUILayout.DerivedTypeField(null, typeof(NReactionBase), '\t')
 		
 		if createType is not null:
 			createdElement as NReactionBase = ScriptableObject().CreateInstance(createType.ToString())

@@ -9,7 +9,7 @@ import UnityEditor
 import UnityEngine
 
 
-class NEditorGUILayout:
+class NEventEditorGUILayout:
 	static def DerivedTypeField(selectedType as Type, baseType as Type) as Type:
 		return DerivedTypeFieldWithNone(selectedType, baseType, 'None')
 	
