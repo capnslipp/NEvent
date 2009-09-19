@@ -73,7 +73,9 @@ class NEventEditorGUILayout:
 		
 		
 		actionEventType as Type = null
-		actionEventType = action.eventType if action is not null
+		if action is not null:
+			assert action.eventType is not null
+			actionEventType = action.eventType.type
 		
 		resultEventType as Type = DerivedTypeField(actionEventType, NEventBase)
 		
@@ -84,7 +86,7 @@ class NEventEditorGUILayout:
 				if action is null:
 					action = NEventAction(resultEventType)
 				else:
-					action.eventType = resultEventType
+					action.eventType.type = resultEventType
 			
 			action.scope = EditorGUILayout.EnumPopup(action.scope)
 			
@@ -99,6 +101,17 @@ class NEventEditorGUILayout:
 		EditorGUILayout.EndVertical()
 		
 		return action
+	
+	
+	
+	static def SerializableTypeField(field as SerializableType) as SerializableType:
+		field.type = DerivedTypeField(field.type, object)
+		return field
+	
+	static def SerializableDerivedTypeField(field as SerializableDerivedType) as SerializableDerivedType:
+		assert field.baseType.type is not null
+		field.type = DerivedTypeField(field.type, field.baseType.type)
+		return field
 	
 	
 	
@@ -137,6 +150,12 @@ class NEventEditorGUILayout:
 		
 		
 		# custom types
+		
+		if fieldType == SerializableType:
+			return SerializableTypeField(fieldValue)
+		
+		if fieldType == SerializableDerivedType:
+			return SerializableDerivedTypeField(fieldValue)
 		
 		if fieldType == NEventAction:
 			return EventActionField(fieldValue)
