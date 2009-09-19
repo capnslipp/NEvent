@@ -67,37 +67,74 @@ class NEditorGUILayout:
 		return m.IsSubclassOf(filterCriteria as Type)
 	
 	
+	
+	static def EventActionField(action as NEventAction) as NEventAction:
+		actionType as Type = null
+		actionType = action.noteType if action is not null
+		
+		resultType as Type = DerivedTypeField(actionType, NEventBase)
+		
+		if resultType is null:
+			return null
+		elif resultType != actionType:
+			return NEventAction(resultType)
+		else:
+			return action
+	
+	
+	
 	static def AutoField(fieldValue as object) as object:
-		if fieldValue isa int:
+		if fieldValue is null:
+			return AutoField(fieldValue, null)
+		else:
+			return AutoField(fieldValue, fieldValue.GetType())
+	
+	static def AutoField(fieldValue as object, fieldType as Type) as object:
+		# built-in value types
+		
+		if fieldType == int:
 			return EditorGUILayout.IntField(fieldValue)
 		
-		if fieldValue isa single or fieldValue isa double:
+		if fieldType == single or fieldType == double:
 			return EditorGUILayout.FloatField(fieldValue)
 		
-		if fieldValue isa string:
+		if fieldType == string:
 			return EditorGUILayout.TextField(fieldValue)
 		
-		if fieldValue isa Vector2:
+		if fieldType == Vector2:
 			return EditorGUILayout.Vector2Field('', cast(Vector2, fieldValue))
 		
-		if fieldValue isa Vector3:
+		if fieldType == Vector3:
 			return EditorGUILayout.Vector3Field('', cast(Vector3, fieldValue))
 		
-		if fieldValue isa Vector4:
+		if fieldType == Vector4:
 			return EditorGUILayout.Vector4Field('', cast(Vector4, fieldValue))
 		
-		if fieldValue isa Rect:
+		if fieldType == Rect:
 			return EditorGUILayout.RectField(cast(Rect, fieldValue))
 		
-		if fieldValue isa Color:
+		if fieldType == Color:
 			return EditorGUILayout.ColorField(cast(Color, fieldValue))
 		
-		if fieldValue isa UnityEngine.Object:
-			return EditorGUILayout.ObjectField(fieldValue as UnityEngine.Object, fieldValue.GetType())
+		
+		# custom types
+		
+		if fieldType == NEventAction:
+			return EventActionField(fieldValue)
+		
+		
+		# Unity types
+		
+		if fieldType == GameObject:
+			return EditorGUILayout.ObjectField(cast(GameObject, fieldValue), GameObject)
+		
+		if fieldType == UnityEngine.Object:
+			return EditorGUILayout.ObjectField(fieldValue, fieldValue.GetType())
 		
 		
 		# read-only field
-		fieldValueString as string = 'Null'
+		
+		fieldValueString as string = "Null (${fieldType})"
 		fieldValueString = fieldValue.ToString() if fieldValue is not null
 		GUILayout.Label(fieldValueString)
 		return fieldValueString
