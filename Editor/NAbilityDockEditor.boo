@@ -103,8 +103,8 @@ class NAbilityDockEditor (Editor):
 			GUILayout.Label(ObjectNames.NicifyVariableName(field.Name), kLabelStyle)
 			
 			origValue = field.GetValue(element)
-			resultValue = NEditorGUILayout.AutoField(origValue)
-			#if resultValue.GetType() == origValue.GetType():
+			resultValue = NEditorGUILayout.AutoField(origValue, field.FieldType)
+			
 			try:
 				field.SetValue(element, resultValue)
 			except e as Exception:
@@ -112,41 +112,9 @@ class NAbilityDockEditor (Editor):
 			
 			EditorGUILayout.EndHorizontal()
 		
-		# private fields get set back to 0 when the game starts (probably a Unity thing)
-		#privElementFields as (FieldInfo) = element.GetType().GetFields(kPrivFieldBindingFlags)
-		#for field as FieldInfo in privElementFields:
-		#	if typeof(NReactionBase).GetField(field.Name, kPubAndPrivFieldBindingFlags):
-		#		continue
-		#	
-		#	EditorGUILayout.BeginHorizontal()
-		#	GUILayout.Label("(initial) ${ObjectNames.NicifyVariableName(field.Name)}", kLabelStyle)
-		#	
-		#	origValue = field.GetValue(element)
-		#	resultValue = NEditorGUILayout.AutoField(origValue)
-		#	#if resultValue.GetType() == field.GetType():
-		#	try:
-		#		field.SetValue(element, resultValue)
-		#	except e as Exception:
-		#		pass
-		#	
-		#	EditorGUILayout.EndHorizontal()
-		
-		# setting properties cause all kind of problems since the property can trigger other stuff to happen
-		#elementProperties as (PropertyInfo) = element.GetType().GetProperties(kPropertyBindingFlags)
-		#for property as PropertyInfo in elementProperties:
-		#	if typeof(NAbilityBase).GetProperty(property.Name, kPropertyBindingFlags):
-		#		continue
-		#	
-		#	EditorGUILayout.BeginHorizontal()
-		#	EditorGUILayout.PrefixLabel(ObjectNames.NicifyVariableName(property.Name))
-		#	
-		#	origValue = property.GetValue(element, null)
-		#	resultValue = NEditorGUILayout.AutoField(origValue)
-		#	if resultValue.GetType() == origValue.GetType():
-		#		property.SetValue(element, resultValue, null)
-		#	
-		#	EditorGUILayout.EndHorizontal()
-		#	EditorGUILayout.Separator()
+		# cannot use private fields or properties because:
+		# 	private fields get set back to 0 when the game starts (probably a Unity thing)
+		# 	setting properties cause all kind of problems since the property can trigger other stuff to happen
 		
 		return element
 	
