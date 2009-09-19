@@ -45,11 +45,11 @@ class NEventAction:
 		Tagged # sender & all tagged GameObjects
 		Global # all GameObjects; only use for testing!!!
 	
-	scope as Scope = Scope.Local
+	public scope as Scope = Scope.Local
 	
-	scopeSpecificGO as GameObject
-	scopeName as string
-	scopeTag as string
+	public scopeSpecificGO as GameObject
+	public scopeName as string
+	public scopeTag as string
 	
 	
 	# @todo: store sender as owner
