@@ -10,33 +10,22 @@ import UnityEngine
 
 [Serializable]
 class NEventAction:
-	# hand-edit at your own risk!
-	public eventTypeName as string
-	
-	eventType as Type:
-		get:
-			return null if String.IsNullOrEmpty(eventTypeName)
-			type as Type = Type.GetType(eventTypeName)
-			assert type.IsSubclassOf(NEventBase), "${type} must be derived from NEventBase"
-			return type
-		set:
-			assert value.IsSubclassOf(NEventBase), "${value} must be derived from NEventBase"
-			eventTypeName = value.Name
+	public eventType as SerializableDerivedType = SerializableDerivedType(NEventBase)
 	
 	
 	name as string:
 		get:
-			return NEventBase.GetName(eventType)
+			return NEventBase.GetName(eventType.type)
 	
 	messageName as string:
 		get:
-			return NEventBase.GetMessageName(eventType)
+			return NEventBase.GetMessageName(eventType.type)
 	
 	
 	
 	def constructor(anEventType as Type):
 		assert anEventType is not null
-		eventTypeName = anEventType.Name
+		eventType.type = anEventType
 	
 	
 	
@@ -73,9 +62,8 @@ class NEventAction:
 		
 		# create the Event
 		
-		sendEventType as Type = eventType()
-		assert sendEventType is not null
-		sendEvent as NEventBase = sendEventType()
+		assert eventType.type is not null
+		sendEvent as NEventBase = eventType.type()
 		assert sendEvent.GetType().IsSubclassOf(NEventBase)
 		
 		
