@@ -55,7 +55,7 @@ class NAbilityDockEditor (Editor):
 		
 		
 		# clean up: destory objects that were marked to be removed
-		if _elementsToRemove.Length != 0:
+		if _elementsToRemove.Length > 0:
 			for removeElement as NAbilityBase in _elementsToRemove:
 				targetElementList.Remove(removeElement)
 				ScriptableObject.DestroyImmediate(removeElement) # to prevent leaks
@@ -78,7 +78,7 @@ class NAbilityDockEditor (Editor):
 		EditorGUILayout.Foldout(true, niceName)
 		#GUILayout.Label(niceName)
 		
-		destroyPressed as bool = GUILayout.Button('Destory', GUILayout.Width(60))
+		destroyPressed as bool = GUILayout.Button('Destroy', GUILayout.Width(60))
 		
 		EditorGUILayout.EndHorizontal()
 		
