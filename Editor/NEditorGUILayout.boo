@@ -69,17 +69,36 @@ class NEditorGUILayout:
 	
 	
 	static def EventActionField(action as NEventAction) as NEventAction:
-		actionType as Type = null
-		actionType = action.noteType if action is not null
+		EditorGUILayout.BeginVertical()
 		
-		resultType as Type = DerivedTypeField(actionType, NEventBase)
 		
-		if resultType is null:
-			return null
-		elif resultType != actionType:
-			return NEventAction(resultType)
+		actionEventType as Type = null
+		actionEventType = action.eventType if action is not null
+		
+		resultEventType as Type = DerivedTypeField(actionEventType, NEventBase)
+		
+		if resultEventType is null:
+			action = null
 		else:
-			return action
+			if resultEventType != actionEventType:
+				if action is null:
+					action = NEventAction(resultEventType)
+				else:
+					action.eventType = resultEventType
+			
+			action.scope = EditorGUILayout.EnumPopup(action.scope)
+			
+			if action.scope == NEventAction.Scope.Specific:
+				action.scopeSpecificGO = EditorGUILayout.ObjectField(action.scopeSpecificGO, GameObject)
+			elif action.scope == NEventAction.Scope.Named:
+				action.scopeName = EditorGUILayout.TextField(action.scopeName)
+			elif action.scope == NEventAction.Scope.Tagged:
+				action.scopeTag = EditorGUILayout.TextField(action.scopeTag)
+		
+		
+		EditorGUILayout.EndVertical()
+		
+		return action
 	
 	
 	
