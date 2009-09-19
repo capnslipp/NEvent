@@ -46,9 +46,9 @@ class NReactionDockEditor (Editor):
 		
 		# element fields
 		for listElement as NReactionBase in targetElementList:
-			#EditorGUILayout.Separator()
-			resultElement = LayOutElement(listElement)
+			resultElement as NReactionBase = LayOutElement(listElement)
 			EditorGUILayout.Separator()
+			
 			if resultElement is not listElement:
 				listHasBeenModified = true
 				listElement = resultElement # this actually won't do anything if the resultElement is a different type (i.e null)
