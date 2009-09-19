@@ -46,8 +46,6 @@ class NAbilityDockEditor (Editor):
 		
 		# element fields
 		for listElement as NAbilityBase in targetElementList:
-			continue if listElement is null
-			
 			#EditorGUILayout.Separator()
 			resultElement = LayOutElement(listElement)
 			EditorGUILayout.Separator()
@@ -61,6 +59,8 @@ class NAbilityDockEditor (Editor):
 			for removeElement as NAbilityBase in _elementsToRemove:
 				targetElementList.Remove(removeElement)
 				ScriptableObject.DestroyImmediate(removeElement) # to prevent leaks
+			
+			_elementsToRemove = array(NAbilityBase, 0)
 		
 		
 		if listHasBeenModified:
@@ -74,8 +74,9 @@ class NAbilityDockEditor (Editor):
 	private def LayOutElement(element as NAbilityBase) as NAbilityBase:
 		EditorGUILayout.BeginHorizontal()
 		
-		EditorGUILayout.Foldout(true, ObjectNames.NicifyVariableName(element.abilityName))
-		#GUILayout.Label()
+		niceName as string = ObjectNames.NicifyVariableName(element.abilityName)
+		EditorGUILayout.Foldout(true, niceName)
+		#GUILayout.Label(niceName)
 		
 		destroyPressed as bool = GUILayout.Button('Destory', GUILayout.Width(60))
 		
@@ -159,9 +160,9 @@ class NAbilityDockEditor (Editor):
 		createType as Type = NEditorGUILayout.DerivedTypeField(null, typeof(NAbilityBase), '\t')
 		
 		if createType is not null:
-			didCreate = true
 			createdElement as NAbilityBase = ScriptableObject().CreateInstance(createType.ToString())
 			elementList.Add(createdElement)
+			didCreate = true
 		else:
 			didCreate = false
 		

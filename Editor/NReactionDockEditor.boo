@@ -46,8 +46,6 @@ class NReactionDockEditor (Editor):
 		
 		# element fields
 		for listElement as NReactionBase in targetElementList:
-			continue if listElement is null
-			
 			#EditorGUILayout.Separator()
 			resultElement = LayOutElement(listElement)
 			EditorGUILayout.Separator()
@@ -61,6 +59,8 @@ class NReactionDockEditor (Editor):
 			for removeElement as NReactionBase in _elementsToRemove:
 				targetElementList.Remove(removeElement)
 				ScriptableObject.DestroyImmediate(removeElement) # to prevent leaks
+			
+			_elementsToRemove = array(NReactionBase, 0)
 		
 		
 		if listHasBeenModified:
@@ -74,8 +74,9 @@ class NReactionDockEditor (Editor):
 	private def LayOutElement(element as NReactionBase) as NReactionBase:
 		EditorGUILayout.BeginHorizontal()
 		
-		EditorGUILayout.Foldout(true, ObjectNames.NicifyVariableName("${element.reactionName} (on) ${element.eventName}"))
-		#GUILayout.Label()
+		niceName as string = ObjectNames.NicifyVariableName("${element.reactionName} (on) ${element.eventName}")
+		EditorGUILayout.Foldout(true, niceName)
+		#GUILayout.Label(niceName)
 		
 		destroyPressed as bool = GUILayout.Button('Destory', GUILayout.Width(60))
 		
@@ -159,9 +160,9 @@ class NReactionDockEditor (Editor):
 		createType as Type = NEditorGUILayout.DerivedTypeField(null, typeof(NReactionBase), '\t')
 		
 		if createType is not null:
-			didCreate = true
 			createdElement as NReactionBase = ScriptableObject().CreateInstance(createType.ToString())
 			elementList.Add(createdElement)
+			didCreate = true
 		else:
 			didCreate = false
 		
