@@ -51,7 +51,7 @@ class NReactionDockEditor (Editor):
 			EditorGUILayout.Separator()
 			if resultElement is not listElement:
 				listHasBeenModified = true
-				listElement = resultElement
+				listElement = resultElement # this actually won't do anything if the resultElement is a different type (i.e null)
 		
 		
 		# clean up: destory objects that were marked to be removed
