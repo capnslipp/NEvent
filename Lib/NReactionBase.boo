@@ -21,6 +21,8 @@ abstract class NReactionBase (ScriptableObject):
 	
 	
 	def constructor():
+		assert self.GetType() != NReactionBase, "${self.GetType().Name} cannot be instantiated directly."
+		
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
 		

@@ -22,6 +22,8 @@ abstract class NEventBase:
 	
 	
 	def constructor():
+		assert self.GetType() != NEventBase, "${self.GetType().Name} cannot be instantiated directly."
+		
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
 		assert typeName.EndsWith('Event'), "Event Type \"${typeName}\"'s name must end with the word 'Event'"
