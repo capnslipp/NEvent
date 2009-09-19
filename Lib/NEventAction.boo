@@ -54,8 +54,8 @@ class NEventAction:
 	public scope as Scope = Scope.Local
 	
 	public scopeSpecificGO as GameObject
-	public scopeName as string
-	public scopeTag as string
+	public scopeName as string = ''
+	public scopeTag as string = ''
 	
 	
 	
