@@ -8,6 +8,7 @@ import System.Reflection
 import UnityEngine
 
 
+[Serializable]
 class NEventAction:
 	final public noteType as Type
 	

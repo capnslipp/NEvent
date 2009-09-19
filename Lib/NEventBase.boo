@@ -8,6 +8,7 @@ import System
 import UnityEngine
 
 
+[Serializable]
 abstract class NEventBase:
 	public static final kReceiveMethodName = 'ReceiveNEvent'
 	
