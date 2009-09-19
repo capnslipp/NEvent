@@ -17,16 +17,13 @@ class NReactionDockEditor (Editor):
 	#static final kPubAndPrivFieldBindingFlags as BindingFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance
 	#static final kPropertyBindingFlags as BindingFlags = BindingFlags.Public | BindingFlags.Instance
 	
-	static final kLabelStyle as GUIStyle
-	
-	static def constructor():
-		kLabelStyle = GUIStyle(
-			margin: RectOffset(left: 20),
-			padding: RectOffset(),
-			alignment: TextAnchor.MiddleLeft,
-			fixedWidth: 150,
-			stretchWidth: false
-		)
+	static final kLabelStyle as GUIStyle = GUIStyle(
+		margin: RectOffset(left: 20),
+		padding: RectOffset(),
+		alignment: TextAnchor.MiddleLeft,
+		fixedWidth: 150,
+		stretchWidth: false
+	)
 	
 	
 	_elementsToRemove as (NReactionBase) = array(NReactionBase, 0)
