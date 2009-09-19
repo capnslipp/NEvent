@@ -31,7 +31,7 @@ abstract class NEventBase:
 	
 	
 	def constructor():
-		assert self.GetType() != NEventBase, "${self.GetType().Name} cannot be instantiated directly."
+		assert self.GetType() != NEventBase, "${self.GetType().FullName} cannot be instantiated directly."
 		
 		# figure out the name from the class's name
 		_name = GetName(self.GetType())
