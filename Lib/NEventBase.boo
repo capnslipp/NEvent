@@ -8,26 +8,34 @@ import System
 import UnityEngine
 
 
-[Serializable]
 abstract class NEventBase:
 	public static final kReceiveMethodName = 'ReceiveNEvent'
+	
+	
+	
+	static def GetName(eventType as Type) as string:
+		typeName as string = eventType.Name
+		assert typeName.EndsWith('Event'), "Event Type \"${typeName}\"'s name must end with the word 'Event'"
+		return typeName.Remove( typeName.LastIndexOf('Event') )
+	
+	static def GetMessageName(eventType as Type) as string:
+		return "On${GetName(eventType)}"
 	
 	
 	[Getter(name)]
 	final _name as string
 	
-	messageName as string:
-		get:
-			return "On${name}"
+	[Getter(messageName)]
+	final _messageName as string
+	
 	
 	
 	def constructor():
 		assert self.GetType() != NEventBase, "${self.GetType().Name} cannot be instantiated directly."
 		
 		# figure out the name from the class's name
-		typeName as string = self.GetType().Name
-		assert typeName.EndsWith('Event'), "Event Type \"${typeName}\"'s name must end with the word 'Event'"
-		_name = typeName.Remove( typeName.LastIndexOf('Event') )
+		_name = GetName(self.GetType())
+		_messageName = GetMessageName(self.GetType())
 	
 	
 	
