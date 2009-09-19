@@ -10,28 +10,34 @@ import UnityEngine
 
 [Serializable]
 class NEventAction:
-	final public noteType as Type
+	# hand-edit at your own risk!
+	public eventTypeName as string
+	
+	eventType as Type:
+		get:
+			return null if String.IsNullOrEmpty(eventTypeName)
+			type as Type = Type.GetType(eventTypeName)
+			assert type.IsSubclassOf(NEventBase), "${type} must be derived from NEventBase"
+			return type
+		set:
+			assert value.IsSubclassOf(NEventBase), "${value} must be derived from NEventBase"
+			eventTypeName = value.Name
 	
 	
-	[Getter(name)]
-	_name as string
-	
+	name as string:
+		get:
+			return NEventBase.GetName(eventType)
 	
 	messageName as string:
 		get:
-			# @todo: bad, bad, bad; must find a cleaner way to do this!
-			return (noteType() as NEventBase).messageName
+			return NEventBase.GetMessageName(eventType)
 	
 	
-	def constructor(aNoteType as string):
-		self( Type.GetType(aNoteType) )
 	
-	def constructor(aNoteType as Type):
-		noteType = aNoteType
-		assert noteType.IsSubclassOf(NEventBase)
-		
-		# @todo: bad, bad, bad; must find a cleaner way to do this!
-		_name = (noteType() as NEventBase).name
+	def constructor(anEventType as Type):
+		assert anEventType is not null
+		eventTypeName = anEventType.Name
+	
 	
 	
 	enum Scope:
@@ -52,32 +58,35 @@ class NEventAction:
 	public scopeTag as string
 	
 	
+	
 	# @todo: store sender as owner
 	def Send(sender as GameObject) as void:
 		Send(sender, null)
 	
 	# @todo: store sender as owner
-	def Send(sender as GameObject, noteArg as object) as void:
-		Send(sender, (noteArg,))
+	def Send(sender as GameObject, sendEventArg as object) as void:
+		Send(sender, (sendEventArg,))
 	
 	# @todo: store sender as owner
-	def Send(sender as GameObject, noteArgs as (object)) as void:
+	def Send(sender as GameObject, sendEventArgs as (object)) as void:
 		assert sender is not null
 		
 		# create the Event
 		
-		note as NEventBase = noteType()
-		assert note.GetType().IsSubclassOf(NEventBase)
+		sendEventType as Type = eventType()
+		assert sendEventType is not null
+		sendEvent as NEventBase = sendEventType()
+		assert sendEvent.GetType().IsSubclassOf(NEventBase)
 		
 		
 		# populate the Event's data
 		
-		noteFields as (FieldInfo) = note.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
-		assert noteArgs.Length == noteFields.Length
+		sendEventFields as (FieldInfo) = sendEvent.GetType().GetFields(BindingFlags.Public | BindingFlags.Instance)
+		assert sendEventArgs.Length == sendEventFields.Length
 		
-		for nI in range(0, noteFields.Length):
-			noteField as FieldInfo = noteFields[nI]
-			noteField.SetValue(note, noteArgs[nI])
+		for nI in range(0, sendEventFields.Length):
+			sendEventField as FieldInfo = sendEventFields[nI]
+			sendEventField.SetValue(sendEvent, sendEventArgs[nI])
 		
 		
 		# figure out the event's target(s)
@@ -133,7 +142,7 @@ class NEventAction:
 		
 		# if an event plug is available, use it
 		if eventPlug is not null:
-			eventPlug.PushNEvent(note, targets, global)
+			eventPlug.PushNEvent(sendEvent, targets, global)
 		# otherwise, just send the event immediately
 		else:
-			note.Send(targets, global)
+			sendEvent.Send(targets, global)
