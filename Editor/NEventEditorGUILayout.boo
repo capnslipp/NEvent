@@ -148,6 +148,9 @@ class NEventEditorGUILayout:
 		if fieldType == Color:
 			return EditorGUILayout.ColorField(cast(Color, fieldValue))
 		
+		if fieldType.IsSubclassOf(Enum):
+			return EditorGUILayout.EnumPopup(fieldValue)
+		
 		
 		# custom types
 		
