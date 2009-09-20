@@ -52,7 +52,7 @@ h3. Tracking Latest (via Git Submodule)
 To get it:
 # @cd@ into the root directory of your project.
 # Run the following (make sure the *Plugins* directory exists beforehand):
-	<pre>git submodule add git://github.com/slippyd/unity3d-NState.git Assets/Plugins/NState
+	<pre>git submodule add git://github.com/slippyd/unity3d-NEvent.git Assets/Plugins/NEvent
 git submodule init
 git submodule update</pre>
 
