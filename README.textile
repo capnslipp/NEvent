@@ -2,26 +2,68 @@ h1. NEvent
 
 NEvent is an event system for the Unity Game Engine, developed by Slippy Douglas for Nectar Games. More info at "nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one":http://nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one .
 
-* NEvent optionally uses UUnit ("github.com/slippyd/unity3d-UUnit":http://github.com/slippyd/unity3d-UUnit). To remove this dependency, locally delete the "Test" folder.
-
-License info pending, but it will likely be some kind of "free to use, as long as you give me credit" type of deal. It is on GitHub, after all.
+License info pending, but it will likely be some kind of "free to use, as long as you give us credit" type of deal. It is on GitHub, after all.
 
 
-h2. Usage
 
-h3. Usage Only
+h2. Notes
+
+h3. Dependencies
+
+* NEvent optionally uses UUnit ("github.com/slippyd/unity3d-UUnit":http://github.com/slippyd/unity3d-UUnit). To remove this dependency, just locally delete the *Test* folder.
+
+
+
+h2. Basic Usage
+
+h3. Direct Download (without Git)
+
+Use this if you just want to check the library, with no risks.
 
 # Go to the GitHub page for this project (likely "github.com/slippyd/unity3d-NEvent":http://github.com/slippyd/unity3d-NEvent).
-# Click the *Download* button.
-# Choose your preferred compression format (ZIP if you're unsure).
-# Wait for the file to download and then decompress the downloaded file (if it doesn't decompress automatically).
+# Click the *Download* button and choose a format (ZIP is a safe bet).
+# Wait for the download and then uncompress it (if it doesn't automatically).
 # Rename the resulting folder to just *NEvent*.
-# Drop it into your project's *Assets* folder (or any subfolder).
+# Drop it into your project's *Assets/Plugins* folder.
 
-h3. Usage & Modification
 
-# Make sure you're set up for Git. (There are plenty of good resources available, including GitHub itself.)
-# @cd@ into the Assets directory (or a subdirectory of your choice).
-# Follow the GitHub help page at "help.github.com/forking":http://help.github.com/forking/ .
-#* On the line where it says to do a @git clone@, you'll probably want to do this:<br/>
-	<pre>git clone git@github.com:yourusernamehere/unity3d-NEvent.git NEvent</pre>
+
+h2. Advanced Usage
+
+Prerequisite: _Make sure you're set up for Git. (There are plenty of good resources available, including GitHub itself.)_
+
+
+h3. Tracking Latest (via Git Clone)
+
+Use this if your Unity project is not a Git repository (i.e. if you're using SVN or otherwise).
+
+To get it:
+# @cd@ into the *Assets/Plugins* directory of your project (or any other subdirectory of *Assets*).
+# Run a: <code>git://github.com/slippyd/unity3d-NEvent.git NEvent</code>
+
+Later on, to update to latest:
+# @cd@ into the *NEvent* directory again.
+# Run a: <code>git pull origin master</code>
+
+
+
+h3. Tracking Latest (via Git Submodule)
+
+To get it:
+# @cd@ into the root directory of your project.
+# Run the following (make sure the *Plugins* directory exists beforehand):
+	<pre>	git submodule add git://github.com/slippyd/unity3d-NState.git Assets/Plugins/NState
+	git submodule init
+	git submodule update</pre>
+
+Later on, to update to latest:
+# @cd@ into the root directory of your project again.
+# Run a: <code>git submodule update</code>
+
+
+h3. Making Modifications (via Git Fork)
+
+# @cd@ into the *Assets/Plugins* directory of your project.
+# Fork the repository and then clone your version (following the GitHub help page at "help.github.com/forking":http://help.github.com/forking/).
+#* On the line where it says to do a "@git clone@", you'll probably want to do this (note the "_your_username_here_"):<br/>
+	<pre>git clone git@github.com:your_username_here/unity3d-NEvent.git NEvent</pre>
