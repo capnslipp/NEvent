@@ -114,9 +114,9 @@ class NEventEditorGUILayout:
 		return field
 	
 	
-	static def CallableField(field as ICallable) as ICallable:
-		resultType as Type = DerivedTypeField(field.GetType(), MulticastDelegate) # C#'s delegate operator / Boo's callable operator
-		return field
+	#static def CallableField(field as ICallable) as ICallable:
+	#	resultType as Type = DerivedTypeField(field.GetType(), MulticastDelegate) # C#'s delegate operator / Boo's callable operator
+	#	return field
 	
 	
 	
@@ -156,8 +156,8 @@ class NEventEditorGUILayout:
 		if fieldType.IsSubclassOf(Enum):
 			return EditorGUILayout.EnumPopup(fieldValue)
 		
-		if fieldType.IsSubclassOf(MulticastDelegate): # C#'s delegate operator / Boo's callable operator
-			return CallableField(fieldValue)
+		#if fieldType.IsSubclassOf(MulticastDelegate): # C#'s delegate operator / Boo's callable operator
+		#	return CallableField(fieldValue)
 		
 		
 		# custom types
