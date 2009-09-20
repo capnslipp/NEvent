@@ -13,6 +13,11 @@ h3. Dependencies
 * NEvent optionally uses UUnit ("github.com/slippyd/unity3d-UUnit":http://github.com/slippyd/unity3d-UUnit). To remove this dependency, just locally delete the *Test* folder.
 
 
+h3. Incompatibilities
+
+* NEvent _will not work_ if placed in a *Plugins* or a *Editor* folder in your project. (It takes care of load order with its own internal folder structure.)
+
+
 
 h2. Basic Usage
 
@@ -24,7 +29,7 @@ Use this if you just want to check the library, with no risks.
 # Click the *Download* button and choose a format (ZIP is a safe bet).
 # Wait for the download and then uncompress it (if it doesn't automatically).
 # Rename the resulting folder to just *NEvent*.
-# Drop it into your project's *Assets/Plugins* folder.
+# Drop it into your project's *Assets/Libs* folder.
 
 
 
@@ -38,7 +43,7 @@ h3. Tracking Latest (via Git Clone)
 Use this if your Unity project is not a Git repository (i.e. if you're using SVN or otherwise).
 
 To get it:
-# @cd@ into the *Assets/Plugins* directory of your project (or any other subdirectory of *Assets*).
+# @cd@ into the *Assets/Libs* directory of your project (or any other subdirectory of *Assets*).
 # Run a: <code>git://github.com/slippyd/unity3d-NEvent.git NEvent</code>
 
 Later on, to update to latest:
@@ -51,8 +56,8 @@ h3. Tracking Latest (via Git Submodule)
 
 To get it:
 # @cd@ into the root directory of your project.
-# Run the following (make sure the *Plugins* directory exists beforehand):
-	<pre>git submodule add git://github.com/slippyd/unity3d-NEvent.git Assets/Plugins/NEvent
+# Run the following (make sure the *Libs* directory exists beforehand):
+	<pre>git submodule add git://github.com/slippyd/unity3d-NEvent.git Assets/Libs/NEvent
 git submodule init
 git submodule update</pre>
 
@@ -63,7 +68,7 @@ Later on, to update to latest:
 
 h3. Making Modifications (via Git Fork)
 
-# @cd@ into the *Assets/Plugins* directory of your project.
+# @cd@ into the *Assets/Libs* directory of your project.
 # Fork the repository and then clone your version (following the GitHub help page at "help.github.com/forking":http://help.github.com/forking/).
 #* On the line where it says to do a "@git clone@", you'll probably want to do this (note the "_your_username_here_"):<br/>
 	<pre>git clone git@github.com:your_username_here/unity3d-NEvent.git NEvent</pre>
