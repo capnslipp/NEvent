@@ -15,7 +15,7 @@ class NReactionDock (MonoBehaviour):
 	
 	def Awake() as void:
 		for reaction in reactions:
-			reaction.owner = gameObject
+			reaction.reactionOwner = gameObject
 	
 	
 	def HasReaction(reactionType as Type) as bool:
@@ -37,7 +37,7 @@ class NReactionDock (MonoBehaviour):
 	def AddReaction(reactionToAdd as NReactionBase) as NReactionBase:
 		reactionType as Type = reactionToAdd.GetType()
 		assert not HasReaction(reactionType)
-		reactionToAdd.owner = gameObject
+		reactionToAdd.reactionOwner = gameObject
 		reactions += (reactionToAdd,)
 		return reactionToAdd
 	

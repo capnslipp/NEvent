@@ -17,7 +17,11 @@ abstract class NReactionBase (ScriptableObject):
 	
 	
 	# allows derived classes access to the handy GameObject and Component accessors
-	public owner as GameObject
+	_reactionOwner as GameObject
+	reactionOwner:
+		set:
+			assert value is not null
+			_reactionOwner = value
 	
 	
 	def constructor():
@@ -44,5 +48,5 @@ abstract class NReactionBase (ScriptableObject):
 	
 	gameObject as GameObject:
 		get:
-			assert owner is not null
-			return owner
+			assert _reactionOwner is not null
+			return _reactionOwner
