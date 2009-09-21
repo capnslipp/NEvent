@@ -2,6 +2,8 @@ h1. NEvent
 
 NEvent is an event system for the Unity Game Engine, developed by Slippy Douglas for Nectar Games. More info at "nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one":http://nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one .
 
+NEvent is far from what I'd call a "1.0" release, but it is usable to an extent. The next major thing that needs to be done is a full write-up of how to use it and, preferably, a demo project.
+
 License info pending, but it will likely be some kind of "free to use, as long as you give us credit" type of deal. It is on GitHub, after all.
 
 
