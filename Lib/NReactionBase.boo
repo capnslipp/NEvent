@@ -25,13 +25,13 @@ abstract class NReactionBase (ScriptableObject):
 	
 	
 	def constructor():
-		assert self.GetType() != NReactionBase, "${self.GetType().FullName} cannot be instantiated directly."
-		
 		# figure out the name from the class's name
 		typeName as string = self.GetType().Name
 		
+		assert self.GetType() != NReactionBase, "${self.GetType().FullName} cannot be instantiated directly."
+		
 		onCharIndex as int = typeName.LastIndexOf('On')
-		assert onCharIndex != -1
+		assert onCharIndex != -1, "Reaction must have 'On' in their class name."
 		_reactionName = typeName[:onCharIndex]
 		assert not String.IsNullOrEmpty(_reactionName)
 		_eventName = typeName[onCharIndex + 2:]
@@ -43,7 +43,7 @@ abstract class NReactionBase (ScriptableObject):
 			if methodInfo.Name == "On${_eventName}":
 				methodExistsForEvent = true
 				break
-		assert methodExistsForEvent
+		assert methodExistsForEvent, "Reaction '${typeName}' must have an 'On${_eventName}' method."
 	
 	
 	gameObject as GameObject:
