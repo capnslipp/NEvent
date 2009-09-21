@@ -30,6 +30,18 @@ abstract class NAbilityBase (ScriptableObject):
 		_abilityName = typeName.Remove( typeName.LastIndexOf('Ability') )
 	
 	
+	final def OnEnable():
+		Awake()
+	
+	
+	
+	# convenience methods
+	
+	virtual def Awake():
+		pass
+	
+	
+	
 	# convenience properties
 	
 	gameObject as GameObject:
