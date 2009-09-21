@@ -159,7 +159,7 @@ class NEvent_TestCase (UUnitTestCase):
 		testReactionDock.AddReaction(testReaction)
 		
 		testAbility = NEvent_TestAbility()
-		testAbility.owner = testAbilityDock.gameObject
+		testAbility.abilityOwner = testAbilityDock.gameObject
 		testAbilityDock.AddAbility(testAbility)
 		
 		# send the message via an ability change

@@ -120,6 +120,20 @@ class NEventEditorGUILayout:
 	
 	
 	
+	static def NAbilityField(field as NAbilityBase) as NAbilityBase:
+			dock as NAbilityDock = null
+			dock = (field as NAbilityBase).gameObject.GetComponent(NAbilityDock) if field is not null
+			return EditorGUILayout.ObjectField(dock, NAbilityDock)
+			#return EditorGUILayout.ObjectField(fieldValue, fieldType)
+	
+	static def NReactionField(field as NReactionBase) as NReactionBase:
+			dock as NReactionDock = null
+			dock = (field as NReactionBase).gameObject.GetComponent(NReactionDock) if field is not null
+			return EditorGUILayout.ObjectField(dock, NReactionDock)
+			#return EditorGUILayout.ObjectField(fieldValue, fieldType)
+	
+	
+	
 	static def AutoField(fieldValue as object) as object:
 		if fieldValue is null:
 			return AutoField(fieldValue, null)
@@ -136,7 +150,7 @@ class NEventEditorGUILayout:
 			return EditorGUILayout.FloatField(fieldValue)
 		
 		if fieldType == string:
-			return EditorGUILayout.TextField(fieldValue)
+			return EditorGUILayout.TextField(fieldValue or '')
 		
 		if fieldType == Vector2:
 			return EditorGUILayout.Vector2Field('', cast(Vector2, fieldValue))
@@ -170,6 +184,12 @@ class NEventEditorGUILayout:
 		
 		if fieldType == NEventAction:
 			return EventActionField(fieldValue)
+		
+		if fieldType.IsSubclassOf(NAbilityBase):
+			return NAbilityField(fieldValue)
+		
+		if fieldType.IsSubclassOf(NReactionBase):
+			return NReactionField(fieldValue)
 		
 		
 		# Unity types
