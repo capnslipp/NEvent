@@ -27,6 +27,10 @@ class NEventAction:
 		assert anEventType is not null
 		eventType.type = anEventType
 	
+	def constructor(anEventType as Type, aScope as Scope):
+		self(anEventType)
+		scope = aScope
+	
 	
 	
 	enum Scope:
