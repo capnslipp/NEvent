@@ -16,7 +16,7 @@ class NAbilityDock (MonoBehaviour, IEnumerable):
 	
 	def Awake() as void:
 		for ability in abilities:
-			ability.owner = gameObject
+			ability.abilityOwner = gameObject
 	
 	
 	def HasAbility(abilityType as Type) as bool:
@@ -38,7 +38,7 @@ class NAbilityDock (MonoBehaviour, IEnumerable):
 	def AddAbility(abilityToAdd as NAbilityBase) as NAbilityBase:
 		abilityType as Type = abilityToAdd.GetType()
 		assert not HasAbility(abilityType)
-		abilityToAdd.owner = gameObject
+		abilityToAdd.abilityOwner = gameObject
 		abilities += (abilityToAdd,)
 		return abilityToAdd
 	

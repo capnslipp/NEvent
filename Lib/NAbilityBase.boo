@@ -14,11 +14,11 @@ abstract class NAbilityBase (ScriptableObject):
 	
 	
 	# allows derived classes access to the handy GameObject and Component accessors
-	_owner as GameObject
-	owner:
+	_abilityOwner as GameObject
+	abilityOwner:
 		set:
 			assert value is not null
-			_owner = value
+			_abilityOwner = value
 	
 	
 	def constructor():
@@ -30,10 +30,13 @@ abstract class NAbilityBase (ScriptableObject):
 		_abilityName = typeName.Remove( typeName.LastIndexOf('Ability') )
 	
 	
+	# convenience properties
+	
 	gameObject as GameObject:
 		get:
-			assert _owner is not null
-			return _owner
+			assert _abilityOwner is not null
+			return _abilityOwner
+	
 	
 	
 	# When sub-classing, add any data you like!
