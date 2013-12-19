@@ -1,6 +1,6 @@
 h1. NEvent
 
-NEvent is an event system for the Unity Game Engine, developed by Slippy Douglas for Nectar Games. More info at "nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one":http://nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one .
+NEvent is an event system for the Unity Game Engine, developed by Slipp D. for Nectar Games. More info at "nectargames.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one":http://nectargames.slippyd.com/2009/09/09/quest-for-an-event-driven-fsm-and-messaging-system-in-unity-day-one .
 
 NEvent is far from what I'd call a "1.0" release, but it is usable to an extent. The next major thing that needs to be done is a full write-up of how to use it and, preferably, a demo project.
 
@@ -12,7 +12,7 @@ h2. Notes
 
 h3. Dependencies
 
-* NEvent optionally uses UUnit ("github.com/slippyd/unity3d-UUnit":http://github.com/slippyd/unity3d-UUnit). To remove this dependency, just locally delete the *Test* folder.
+* NEvent optionally uses UUnit ("github.com/capnslipp/UUnit":http://github.com/capnslipp/UUnit). To remove this dependency, just locally delete the *Test* folder.
 
 
 h3. Incompatibilities
@@ -27,7 +27,7 @@ h3. Direct Download (without Git)
 
 Use this if you just want to check the library, with no risks.
 
-# Go to the GitHub page for this project (likely "github.com/slippyd/unity3d-NEvent":http://github.com/slippyd/unity3d-NEvent).
+# Go to the GitHub page for this project (likely "github.com/capnslipp/NEvent":http://github.com/capnslipp/NEvent).
 # Click the *Download* button and choose a format (ZIP is a safe bet).
 # Wait for the download and then uncompress it (if it doesn't automatically).
 # Rename the resulting folder to just *NEvent*.
@@ -46,7 +46,7 @@ Use this if your Unity project is not a Git repository (i.e. if you're using SVN
 
 To get it:
 # @cd@ into the *Assets/Libs* directory of your project (or any other subdirectory of *Assets*).
-# Run a: <code>git://github.com/slippyd/unity3d-NEvent.git NEvent</code>
+# Run a: <code>git://github.com/capnslipp/NEvent.git NEvent</code>
 
 Later on, to update to latest:
 # @cd@ into the *NEvent* directory again.
@@ -59,7 +59,7 @@ h3. Tracking Latest (via Git Submodule)
 To get it:
 # @cd@ into the root directory of your project.
 # Run the following (make sure the *Libs* directory exists beforehand):
-	<pre>git submodule add git://github.com/slippyd/unity3d-NEvent.git Assets/Libs/NEvent
+	<pre>git submodule add git://github.com/capnslipp/NEvent.git Assets/Libs/NEvent
 git submodule init
 git submodule update</pre>
 
